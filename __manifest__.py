@@ -23,7 +23,7 @@ Reprise d'is_alencon (Odoo 16) et de la partie THEIA d'is_plastigray16 (version 
         "security/ir.access.csv",
         "views/is_database_view.xml",
         "views/is_equipement_view.xml",
-        # "views/is_theia_view.xml",
+        "views/is_theia_view.xml",
         "views/is_ilot_view.xml",
         "views/is_pointage_view.xml",
         # "views/hr_view.xml",

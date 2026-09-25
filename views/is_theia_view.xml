@@ -5,9 +5,6 @@
     <record id="is_theia_root_menu" model="ir.ui.menu" >
         <field name="name">THEIA</field>
         <field name="sequence">5</field>
-        <field name="groups_id" eval="[(6,0,[
-            ref('is_base_secondaire_grp')
-        ])]"/>
     </record>
 
     <menuitem name="Process" id="is_theia_presse_main_menu"
@@ -16,104 +13,38 @@
     <menuitem name="OF" id="menu_is_of_root" 
               parent="is_theia_root_menu" sequence="20"/>
 
-
-
-
-
-
-
     <menuitem name="Indicateurs" id="menu_is_cpi_indicateurs" 
               parent="is_theia_root_menu" sequence="30"/>
-
 
     <record id="is_theia_parametres_menu" model="ir.ui.menu" >
         <field name="name">Paramètres</field>
         <field name="sequence">40</field>
         <field name="parent_id" eval="ref('is_theia_root_menu')"/>
-        <field name="groups_id" eval="[(6,0,[
+        <field name="group_ids" eval="[(6,0,[
             ref('base.group_erp_manager'),
             ref('group_gestionnaire_cpi_raspberry'),
         ])]"/>
     </record>
 
-
-    <!-- THEIA / Parc des presses -->
+    <!-- THEIA / Process -->
     <menuitem action="is_theia_presse_action" 
               id="is_theia_presse_menu" 
               parent="is_theia_presse_main_menu" 
               sequence="10"/>
-    <record id="is_parc_presses_url_action_server" model="ir.actions.server">
-        <field name="name">Parc des presses</field>
-       <field name="model_id" ref="model_ir_actions_act_url"/>
-       <field name="state">code</field>
-       <field name="code">action = model.is_parc_presses_url_action()</field>
-    </record>
-    <menuitem 
-        name="Parc des presses" 
-        id="is_parc_presses_menu" 
-        action="is_parc_presses_url_action_server"
-        parent="is_theia_presse_main_menu"
-        sequence="16"
-    />
-
-    <!-- THEIA / Parc assemblage -->
-    <record id="is_parc_assemblage_url_action_server" model="ir.actions.server">
-        <field name="name">Parc assemblage</field>
-       <field name="model_id" ref="model_ir_actions_act_url"/>
-       <field name="state">code</field>
-       <field name="code">action = model.is_parc_assemblage_url_action()</field>
-    </record>
-    <menuitem 
-        name="Parc assemblage" 
-        id="is_parc_assemblage_menu" 
-        action="is_parc_assemblage_url_action_server"
-        parent="is_theia_presse_main_menu"
-        sequence="17"
-    />
-
-    <!-- THEIA / Indicateurs / Rebuts -->
-    <record id="is_indicateur_rebut_url_action_server" model="ir.actions.server">
-        <field name="name">Rebuts</field>
-       <field name="model_id" ref="model_ir_actions_act_url"/>
-       <field name="state">code</field>
-       <field name="code">action = model.is_indicateur_rebut_url_action()</field>
-    </record>
-    <menuitem 
-        name="Rebuts" 
-        id="is_indicateur_rebut_menu" 
-        action="is_indicateur_rebut_url_action_server"
-        parent="menu_is_cpi_indicateurs" 
-        sequence="10"
-    />
-
-    <!-- THEIA / Indicateurs / TRS -->
-    <record id="is_indicateur_trs_url_action_server" model="ir.actions.server">
-        <field name="name">TRS</field>
-        <field name="model_id" ref="model_ir_actions_act_url"/>
-        <field name="state">code</field>
-        <field name="code">action = model.is_indicateur_trs_url_action()</field>
-    </record>
-    <menuitem 
-        name="TRS" 
-        id="is_indicateur_trs_menu" 
-        action="is_indicateur_trs_url_action_server"
-        parent="menu_is_cpi_indicateurs" 
-        sequence="20"
-    />
 
     <!-- presse.cycle -->
     <record model="ir.ui.view" id="is_presse_cycle_tree_view">
         <field name="name">is.presse.cycle.tree</field>
         <field name="model">is.presse.cycle</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="date_heure"/>
                 <field name="presse_id"/>
                 <field name="entree"  optional="show"/>
-                <field name="couleur" optional="hide" widget="pgcolor"/>
+                <field name="couleur" optional="hide" widget="color"/>
                 <field name="etat"    optional="hide"/>
                 <field name="of_ids" widget="many2many_tags"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="is_presse_cycle_form_view">
@@ -153,31 +84,29 @@
     </record>
     <record model="ir.actions.act_window" id="is_presse_cycle_action">
         <field name="name">Cycles process</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.presse.cycle</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <menuitem action="is_presse_cycle_action" 
               id="menu_is_presse_cycle" 
               parent="is_theia_presse_main_menu" 
               sequence="20"/>
 
-
     <!-- presse.arret -->
     <record model="ir.ui.view" id="is_presse_arret_tree_view">
         <field name="name">is.presse.arret.tree</field>
         <field name="model">is.presse.arret</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="date_heure"/>
                 <field name="presse_id"/>
                 <field name="type_arret_id"/>
-                <field name="couleur" widget='pgcolor'/>
+                <field name="couleur" widget="color"/>
                 <field name="origine"/>
                 <field name="tps_arret" widget="float_time" sum="Total"/>
                 <field name="of_ids"  widget="many2many_tags"/>
                 <field name="employee_id"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="is_presse_arret_form_view">
@@ -220,28 +149,26 @@
     </record>
     <record model="ir.actions.act_window" id="is_presse_arret_action">
         <field name="name">États process</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.presse.arret</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <menuitem action="is_presse_arret_action" 
               id="menu_is_presse_arret" 
               parent="is_theia_presse_main_menu" 
               sequence="30"/>
 
-
     <!-- is.theia.alerte -->
     <record model="ir.ui.view" id="is_theia_alerte_tree_view">
         <field name="name">is.theia.alerte.tree</field>
         <field name="model">is.theia.alerte</field>
         <field name="arch" type="xml">
-            <tree editable="top">
+            <list editable="top">
                 <field name="equipement_id"/>
                 <field name="type_alerte_id"/>
                 <field name="heure_debut"/>
                 <field name="heure_fin"/>
                 <field name="active"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="is_theia_alerte_form_view">
@@ -281,15 +208,13 @@
     </record>
     <record model="ir.actions.act_window" id="is_theia_alerte_action">
         <field name="name">Alertes</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.theia.alerte</field>
-        <field name="view_mode">tree</field>
+        <field name="view_mode">list</field>
     </record>
     <menuitem action="is_theia_alerte_action" 
               id="menu_is_theia_alerte" 
               parent="is_theia_presse_main_menu" 
               sequence="35"/>
-
 
     <!-- of -->
     <record id="bilan_fin_of_action_server" model="ir.actions.server">
@@ -320,7 +245,7 @@
         <field name="name">is.of.tree</field>
         <field name="model">is.of</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name"/>
                 <field name="prioritaire" optional="show"/>
                 <field name="moule"/>
@@ -347,7 +272,7 @@
                 <field name="heure_debut" optional="show"/>
                 <field name="heure_fin" optional="show"/>
                 <field name="heure_fin_planning" optional="show"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="is_of_form_view">
@@ -396,19 +321,19 @@
                     <tr style="vertical-align: top">
                         <td style="width:50%">
                             <field name="tps_ids" nolabel="1" readonly="1">
-                                <tree>
+                                <list>
                                     <field name="etat_presse_id" />
                                     <field name="tps_arret" widget="float_time" sum="Total"/>
-                                    <field name="couleur" widget='pgcolor'/>
-                                </tree>
+                                    <field name="couleur" widget="color"/>
+                                </list>
                             </field>
                         </td>
                         <td>
                             <field name="rebut_ids" nolabel="1" readonly="1">
-                                <tree>
+                                <list>
                                         <field name="defaut_id" />
                                         <field name="qt_rebut" sum="Total"/>
-                                </tree>
+                                </list>
                             </field>
                         </td>
                     </tr>
@@ -417,7 +342,6 @@
         </form>
         </field>
     </record>
-
 
     <!-- Cette vue permet de rendre modifiable certains champs au groupe 'Gestionnaire THEIA' -->
     <record id="is_of_gestionnaire_form_view" model="ir.ui.view">
@@ -479,10 +403,9 @@
     </record>
     <record model="ir.actions.act_window" id="is_of_en_cours_action">
         <field name="name">OF en cours</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.of</field>
         <field name="domain">[('heure_debut', '!=', False),('heure_fin', '=', False)]</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <menuitem action="is_of_en_cours_action" 
               id="menu_is_of_en_cours" 
@@ -490,10 +413,9 @@
               sequence="10"/>
     <record model="ir.actions.act_window" id="is_of_termines_action">
         <field name="name">OF terminés</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.of</field>
         <field name="domain">[('heure_debut', '!=', False),('heure_fin', '!=', False)]</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <menuitem action="is_of_termines_action" 
               id="menu_is_of_termines" 
@@ -501,10 +423,9 @@
               sequence="12"/>
     <record model="ir.actions.act_window" id="is_of_suivant_action">
         <field name="name">OF suivants</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.of</field>
         <field name="domain">[('heure_debut', '=', False),('heure_fin', '=', False)]</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <menuitem action="is_of_suivant_action" 
               id="menu_is_of_suivant" 
@@ -513,10 +434,9 @@
 
     <record model="ir.actions.act_window" id="is_of_tous_action">
         <field name="name">Tous les OF</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.of</field>
         <field name="domain">[]</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <menuitem action="is_of_tous_action" 
               id="menu_is_of_tous" 
@@ -528,7 +448,7 @@
         <field name="name">is.of.declaration.tree</field>
         <field name="model">is.of.declaration</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name"/>
                 <field name="of_id"/>
                 <field name="num_carton"/>
@@ -536,7 +456,7 @@
                 <field name="qt_rebut"/>
                 <field name="defaut_id"/>
                 <field name="employee_id"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="is_of_declaration_form_view">
@@ -579,38 +499,33 @@
     </record>
     <record model="ir.actions.act_window" id="is_of_declaration_action">
         <field name="name">Déclaration des OF</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.of.declaration</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <menuitem action="is_of_declaration_action" 
               id="menu_is_of_declaration" 
               parent="menu_is_of_root" 
               sequence="20"/>
 
-
     <record model="ir.actions.act_window" id="is_theia_ilot_action">
         <field name="name">Ilot</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.ilot</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <menuitem action="is_theia_ilot_action"
               id="is_theia_ilot_menu"
               parent="is_theia_parametres_menu"
               sequence="35" groups="base.group_erp_manager"/>
 
-
-
     <!-- Type de défaut des rebuts -->
     <record model="ir.ui.view" id="is_type_defaut_tree_view">
         <field name="name">is.type.defaut.tree</field>
         <field name="model">is.type.defaut</field>
         <field name="arch" type="xml">
-            <tree editable="top">
+            <list editable="top">
                 <field name="name"/>
                 <field name="active"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="is_type_defaut_form_view">
@@ -638,29 +553,23 @@
     </record>
     <record model="ir.actions.act_window" id="is_type_defaut_action">
         <field name="name">Type de défaut des rebuts</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.type.defaut</field>
-        <field name="view_mode">tree</field>
+        <field name="view_mode">list</field>
     </record>
     <menuitem action="is_type_defaut_action" 
               id="menu_is_type_defaut" 
               parent="is_theia_parametres_menu" 
               sequence="40" groups="base.group_erp_manager"/>
 
-
-
-
-
-
     <!-- is.theia.alerte.type -->
     <record model="ir.ui.view" id="is_theia_alerte_type_tree_view">
         <field name="name">is.theia.alerte.type.tree</field>
         <field name="model">is.theia.alerte.type</field>
         <field name="arch" type="xml">
-            <tree editable="top">
+            <list editable="top">
                 <field name="name"/>
                 <field name="code"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="is_theia_alerte_type_form_view">
@@ -688,32 +597,22 @@
     </record>
     <record model="ir.actions.act_window" id="is_theia_alerte_type_action">
         <field name="name">Type d'alerte</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.theia.alerte.type</field>
-        <field name="view_mode">tree</field>
+        <field name="view_mode">list</field>
     </record>
     <menuitem action="is_theia_alerte_type_action" 
               id="menu_is_theia_alerte_type" 
               parent="is_theia_parametres_menu" 
               sequence="45" groups="base.group_erp_manager"/>
 
-
-
-
-
-
-
-
-
-
     <!-- is.raspberry.zebra -->
     <record model="ir.ui.view" id="is_raspberry_zebra_tree_view">
         <field name="name">is.raspberry.zebra.tree</field>
         <field name="model">is.raspberry.zebra</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="is_raspberry_zebra_form_view">
@@ -741,23 +640,20 @@
     </record>
     <record model="ir.actions.act_window" id="is_raspberry_zebra_action">
         <field name="name">Imprimante Zebra</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.raspberry.zebra</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <menuitem action="is_raspberry_zebra_action" 
               id="menu_is_raspberry_zebra" 
               parent="is_theia_parametres_menu" 
               sequence="50" groups="base.group_erp_manager"/>
 
-
-
     <!-- État Presse -->
     <record model="ir.ui.view" id="is_etat_presse_tree_view">
         <field name="name">is.etat.presse.tree</field>
         <field name="model">is.etat.presse</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name5x5"/>
                 <field name="couleur"/>
                 <field name="colonne5x5"/>
@@ -765,7 +661,7 @@
                 <field name="regroupement_id"/>
                 <field name="production_serie"/>
                 <field name="action_id"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="is_etat_presse_form_view">
@@ -805,26 +701,24 @@
     </record>
     <record model="ir.actions.act_window" id="is_etat_presse_action">
         <field name="name">État presse</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.etat.presse</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <menuitem action="is_etat_presse_action" 
               id="menu_is_etat_presse" 
               parent="is_theia_parametres_menu" 
               sequence="15" groups="base.group_user"/>
 
-
     <!-- Regroupement État Presse -->
     <record model="ir.ui.view" id="is_etat_presse_regroupement_tree_view">
         <field name="name">is.etat.presse.regroupement.tree</field>
         <field name="model">is.etat.presse.regroupement</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name"/>
                 <field name="couleur"/>
                 <field name="ordre"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="is_etat_presse_regroupement_form_view">
@@ -853,22 +747,20 @@
     </record>
     <record model="ir.actions.act_window" id="is_etat_presse_regroupement_action">
         <field name="name">Regroupement État presse</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.etat.presse.regroupement</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <menuitem action="is_etat_presse_regroupement_action" 
               id="menu_is_etat_presse_regroupement" 
               parent="is_theia_parametres_menu" 
               sequence="20" groups="base.group_erp_manager"/>
 
-
     <!-- is.raspberry -->
     <record model="ir.ui.view" id="is_raspberry_tree_view">
         <field name="name">is.raspberry.tree</field>
         <field name="model">is.raspberry</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name"/>
                 <field name="adresse_mac"/>
                 <field name="last_presse_id"/>
@@ -879,7 +771,7 @@
                 <field name="zebra_id"/>
                 <field name="create_date"/>
                 <field name="write_date"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -905,22 +797,22 @@
                         <td style="width:50%">
                             <group string="Entrées"/>
                             <field name="entree_ids" nolabel="1" readonly="1">
-                                <tree>
+                                <list>
                                     <field name="numero" />
                                     <field name="etat" />
-                                    <field name="couleur" widget='pgcolor'/>
-                                </tree>
+                                    <field name="couleur" widget="color"/>
+                                </list>
                             </field>
                         </td>
                         <td>
                             <group string="Sorties"/>
                             <field name="sortie_ids" nolabel="1" readonly="1">
-                                <tree>
-                                    <button title="Inverser l'état de la sortie" name="changer_etat_action"  type="object" icon="fa-gear" />
+                                <list>
+                                    <button title="Inverser l'état de la sortie" name="changer_etat_action"  type="object" icon="settings" />
                                     <field name="numero" />
                                     <field name="etat" />
-                                    <field name="couleur" widget='pgcolor'/>
-                                </tree>
+                                    <field name="couleur" widget="color"/>
+                                </list>
                             </field>
                         </td>
                     </tr>
@@ -941,41 +833,34 @@
     </record>
     <record model="ir.actions.act_window" id="is_raspberry_action">
         <field name="name">Raspberry</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.raspberry</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <menuitem action="is_raspberry_action" 
               id="menu_is_raspberry" 
               parent="is_theia_parametres_menu" 
               sequence="25" groups="group_gestionnaire_cpi_raspberry"/>
 
-
-
-
-
-
     <!-- Lancement automatisé du calcul du bilan de fin d'OF -->
     <!-- TODO : Fonction désactivée car pb d'accès concurrent avec les Raspberry -->
-
 
     <!-- is.theia.trs -->
     <record model="ir.ui.view" id="is_theia_trs_tree_view">
         <field name="name">is.theia.trs.tree</field>
         <field name="model">is.theia.trs</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="date_heure"/>
                 <field name="presse"/>
                 <field name="ilot"/>
                 <field name="etat"/>
-                <field name="couleur" widget='pgcolor'/>
+                <field name="couleur" widget="color"/>
                 <field name="of"/>
                 <field name="code_article"/>
                 <field name="categorie"/>
                 <field name="moule"/>
                 <field name="duree_of"   widget="float_time" sum="Total"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="is_theia_trs_form_view">
@@ -1032,9 +917,8 @@
     </record>
     <record model="ir.actions.act_window" id="is_theia_trs_action">
         <field name="name">Table TRS</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.theia.trs</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <menuitem 
         action="is_theia_trs_action" 
@@ -1043,17 +927,12 @@
         sequence="90"
     />
 
-
-
-
-
-
     <!--Gestion des autorisations -->
     <record id="is_theia_autorisation_menu" model="ir.ui.menu" >
         <field name="name">Gestion des autorisations</field>
         <field name="sequence">35</field>
         <field name="parent_id" eval="ref('is_theia_root_menu')"/>
-        <field name="groups_id" eval="[(6,0,[
+        <field name="group_ids" eval="[(6,0,[
             ref('base.group_erp_manager'),
             ref('group_gestionnaire_cpi_raspberry'),
         ])]"/>
@@ -1064,10 +943,10 @@
         <field name="name">is.theia.validation.groupe.tree</field>
         <field name="model">is.theia.validation.groupe</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name"/>
                 <field name="employee_ids" widget="many2many_tags"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="is_theia_validation_groupe_form_view">
@@ -1095,9 +974,8 @@
     </record>
     <record model="ir.actions.act_window" id="is_theia_validation_groupe_action">
         <field name="name">Groupes de validation</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.theia.validation.groupe</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <menuitem 
         id="is_theia_validation_groupe_menu" 
@@ -1106,17 +984,16 @@
         sequence="10"
     />
 
-
     <!-- is.theia.validation.action -->
     <record model="ir.ui.view" id="is_theia_validation_action_tree_view">
         <field name="name">is.theia.validation.action.tree</field>
         <field name="model">is.theia.validation.action</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name"/>
                 <field name="code"/>
                 <field name="groupe_ids" widget="many2many_tags"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="is_theia_validation_action_form_view">
@@ -1146,9 +1023,8 @@
     </record>
     <record model="ir.actions.act_window" id="is_theia_validation_action_action">
         <field name="name">Actions de validation</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.theia.validation.action</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <menuitem 
         id="is_theia_validation_action_menu" 
@@ -1157,13 +1033,12 @@
         sequence="20"
     />
 
-
     <!-- is.theia.habilitation.operateur -->
     <record model="ir.ui.view" id="is_theia_habilitation_operateur_tree_view">
         <field name="name">is.theia.habilitation.operateur.tree</field>
         <field name="model">is.theia.habilitation.operateur</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="heure_debut"/>
                 <field name="heure_fin"/>
                 <field name="presse_id"/>
@@ -1171,7 +1046,7 @@
                 <field name="operateur_id"/>
                 <field name="valideur_id"/>
                 <field name="state"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="is_theia_habilitation_operateur_form_view">
@@ -1215,15 +1090,14 @@
     </record>
     <record model="ir.actions.act_window" id="is_theia_habilitation_operateur_action">
         <field name="name">Habilitation Opérateur</field>
-        <field name="type">ir.actions.act_window</field>
         <field name="res_model">is.theia.habilitation.operateur</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
     <record id="is_theia_habilitation_operateur_main_menu" model="ir.ui.menu" >
         <field name="name">Habilitation Opérateur</field>
         <field name="sequence">37</field>
         <field name="parent_id" eval="ref('is_theia_root_menu')"/>
-        <field name="groups_id" eval="[(6,0,[
+        <field name="group_ids" eval="[(6,0,[
             ref('is_employes_hors_production_group'),
         ])]"/>
     </record>
@@ -1233,7 +1107,6 @@
         parent="is_theia_habilitation_operateur_main_menu" 
         sequence="10"
     />
-
 
     <!-- is.theia.habilitation.operateur.etat -->
     <record id="is_theia_habilitation_operateur_etat_form_view" model="ir.ui.view">
@@ -1259,13 +1132,13 @@
         <field name="name">is_theia_habilitation_operateur_etat_tree_view</field>
         <field name="model">is.theia.habilitation.operateur.etat</field>
         <field name="arch" type="xml">
-            <tree create="false">
+            <list create="false">
                 <field name="presse_id" />
                 <field name="moule" />
                 <field name="operateur_id" />
                 <field name="state" />
                 <field name="heure_debut" />
-           </tree>
+           </list>
         </field>
     </record>
     <record id="is_theia_habilitation_operateur_etat_search_view" model="ir.ui.view">
@@ -1301,7 +1174,7 @@
         <field name="name">Dernière habilitation</field>
         <field name="res_model">is.theia.habilitation.operateur.etat</field>
         <field name="domain">[]</field>
-        <field name="view_mode">tree,form,graph</field>
+        <field name="view_mode">list,form,graph</field>
     </record>
     <menuitem 
         id="is_theia_habilitation_operateur_etat_menu" 
@@ -1309,146 +1182,6 @@
         parent="is_theia_habilitation_operateur_main_menu" 
         sequence="11"
     />
-
-
-    <!-- Déqualification moule --> 
-    <record model="ir.ui.view" id="is_theia_dequalification_moule_tree_view">
-        <field name="name">is_theia_dequalification_moule_tree_view</field>
-        <field name="model">is.mold</field>
-        <field name="priority" eval="90" />
-        <field name="arch" type="xml">
-            <tree>
-                <field name="name"/>
-                <field name="designation"/>
-                <field name="project"/>
-                <field name="client_id"/> 
-                <field name="dossierf_id"/>
-                <field name="nb_empreintes"/>
-                <field name="emplacement"/>
-                <field name="is_database_id"/>
-            </tree>
-        </field>
-    </record>
-    <record model="ir.ui.view" id="is_theia_dequalification_moule_form_view">
-        <field name="name">is_theia_dequalification_moule_form_view</field>
-        <field name="model">is.mold</field>
-        <field name="priority" eval="90" />
-        <field name="arch" type="xml">
-        <form>
-            <sheet>
-                <group>
-                    <field name="name"/>
-                    <field name="designation"/>
-                    <field name="project"/>
-                    <field name="client_id"/> 
-                    <field name="dossierf_id"/>
-                    <field name="nb_empreintes"/>
-                    <field name="emplacement"/>
-                    <field name="is_database_id"/>
-                    <button 
-                            string="Déqualification des opérateurs de ce moule"
-                            name="dequalification_moule_action"
-                            confirm="Voulez-vous vraiment déqualifier tous les opérateurs de ce moule ?"
-                            type="object" class="oe_highlight"/>
-                </group>
-            </sheet>
-        </form>
-        </field>
-    </record>
-    <record model="ir.actions.act_window" id="is_theia_dequalification_moule_action">
-        <field name="name">Déqualification moule</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">is.mold</field>
-        <field name="context">{}</field>
-        <field name="domain">[]</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_ids" eval="[
-            (5, 0, 0),
-            (0, 0, {'view_mode': 'tree', 'view_id': ref('is_theia_dequalification_moule_tree_view'), 'sequence': 1}),
-            (0, 0, {'view_mode': 'form', 'view_id': ref('is_theia_dequalification_moule_form_view'), 'sequence': 2})
-        ]"/>
-    </record>
-    <record id="is_theia_dequalification_moule_action_menu" model="ir.ui.menu" >
-        <field name="name">Déqualification moule</field>
-        <field name="sequence">20</field>
-        <field name="action"    ref="is_theia_dequalification_moule_action"/>
-        <field name="parent_id" eval="ref('is_theia_habilitation_operateur_main_menu')"/>
-        <field name="groups_id" eval="[(6,0,[
-            ref('group_gestionnaire_cpi_raspberry'),
-        ])]"/>
-    </record>
-
-
-
-
-
-
-
-
-
-
-    <!-- is.theia.lecture.ip -->
-    <record model="ir.ui.view" id="is_theia_lecture_ip_tree_view">
-        <field name="name">is.theia.lecture.ip.tree</field>
-        <field name="model">is.theia.lecture.ip</field>
-        <field name="arch" type="xml">
-            <tree>
-                <field name="date_heure"/>
-                <field name="presse_id"/>
-                <field name="moule"/>
-                <field name="of_ids" widget="many2many_tags" />
-                <field name="operateur_id"/>
-                <field name="ip_id"/>
-            </tree>
-        </field>
-    </record>
-    <record model="ir.ui.view" id="is_theia_lecture_ip_form_view">
-        <field name="name">is.theia.lecture.ip.form</field>
-        <field name="model">is.theia.lecture.ip</field>
-        <field name="arch" type="xml">
-        <form>
-            <sheet>
-                <group>
-                    <field name="date_heure"/>
-                    <field name="presse_id"/>
-                    <field name="moule"/>
-                    <field name="of_ids" widget="many2many_tags" />
-                    <field name="operateur_id"/>
-                    <field name="ip_id"/>
-                </group>
-            </sheet>
-        </form>
-        </field>
-    </record>
-    <record model="ir.ui.view" id="is_theia_lecture_ip_search_view" >
-        <field name="name">is.theia.lecture.ip.search</field>
-        <field name="model">is.theia.lecture.ip</field>
-        <field name="arch" type="xml">
-            <search>
-                <field name="date_heure"/>
-                <field name="presse_id"/>
-                <field name="moule"/>
-                <field name="of_ids"/>
-                <field name="operateur_id"/>
-                <field name="ip_id"/>
-            </search>
-        </field>
-    </record>
-    <record model="ir.actions.act_window" id="is_theia_lecture_ip_action">
-        <field name="name">Lecture Instructions Particulières</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">is.theia.lecture.ip</field>
-        <field name="view_mode">tree,form</field>
-    </record>
-    <menuitem 
-        id="is_theia_lecture_ip_menu" 
-        name="Lecture IP"
-        action="is_theia_lecture_ip_action" 
-        parent="is_theia_habilitation_operateur_main_menu" 
-        sequence="20"
-    />
-
-
 
     </data>
 </odoo>

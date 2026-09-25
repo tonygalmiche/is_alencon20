@@ -1,7 +1,0 @@
-"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
-access_is_res_company_indicateur,access_is_res_company_indicateur,model_is_res_company_indicateur,base.group_user,1,1,1,1
-access_is_res_company_indicateur_affichage,access_is_res_company_indicateur_affichage,model_is_res_company_indicateur_affichage,base.group_user,1,1,1,1
-access_is_releve_qt_produite,access_is_releve_qt_produite,model_is_releve_qt_produite,is_plastigray16.group_gestionnaire_cpi_raspberry,1,1,1,1
-access_is_releve_qt_produite,access_is_releve_qt_produite,model_is_releve_qt_produite,is_plastigray16.group_gestionnaire_cpi_raspberry,1,1,1,0
-access_is_releve_qt_produite_unlink,access_is_releve_qt_produite,model_is_releve_qt_produite,base.group_system,1,1,1,1
-access_is_releve_qt_produite_ligne,access_is_releve_qt_produite_ligne,model_is_releve_qt_produite_ligne,base.group_user,1,1,1,1

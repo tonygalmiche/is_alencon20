@@ -19,12 +19,12 @@ Reprise d'is_alencon (Odoo 16) et de la partie THEIA d'is_plastigray16 (version 
     ],
     "data" : [
         # is_plastigray16
-        # "security/res.groups.xml",
-        "security/ir.model.access.csv",
+        "security/res.groups.xml",
+        "security/ir.access.csv",
         # "views/is_database_view.xml",
         # "views/is_equipement_view.xml",
         # "views/is_theia_view.xml",
-        # "views/mrp_view.xml",
+        # "views/mrp_view.xml",  # vue is.ilot à reprendre
         # "views/is_pointage_view.xml",
         # "views/hr_view.xml",
         # "views/is_mem_var_view.xml",
@@ -34,7 +34,6 @@ Reprise d'is_alencon (Odoo 16) et de la partie THEIA d'is_plastigray16 (version 
         # "views/menu.xml",
 
         # is_alencon
-        "security/ir.model.access.alencon.csv",
         # "views/is_theia_alencon_view.xml",
         # "views/res_company_alencon_view.xml",
         # "views/is_releve_qt_produite_view.xml",

@@ -3,6 +3,7 @@ from odoo import models,fields,api,tools
 import time
 import datetime
 import os
+import subprocess
 from odoo.exceptions import ValidationError
 import logging
 _logger = logging.getLogger(__name__)
@@ -215,6 +216,7 @@ class is_of(models.Model):
     impression_bilan  = fields.Boolean('Bilan imprimé et envoyé par mail', index=True)
     impression_bilan_equipe = fields.Boolean(u"Bilan des OFs de l'équipe imprimé et envoyé par mail", index=True, default=False)
     prioritaire       = fields.Boolean('Ordre de fabrication prioritaire')
+    tx_operateur      = fields.Float(string="Tx Opérateur", digits=(14,3), help="Champ 'Coef Opé' de Silog (CoefOpe)")
     
     _sql_constraints = [
         ('name_uniq', 'unique(name)', u"Le numéro d'OF doit être unique !"),
@@ -391,6 +393,8 @@ class is_of(models.Model):
             obj.qt_rebut_theo   = qt_rebut_theo
             obj.taux_rebut_theo = taux_rebut_theo
             #*******************************************************************
+
+            obj.qt_restante = obj.qt - obj.qt_declaree
         return []
 
 
@@ -660,5 +664,3 @@ class is_theia_alerte(models.Model):
     heure_debut    = fields.Datetime(u'Heure de début', required=True, index=True)
     heure_fin      = fields.Datetime(u'Heure de fin', index=True)
     active         = fields.Boolean(u'Active'       , index=True, default=True)
-
-

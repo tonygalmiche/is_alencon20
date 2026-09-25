@@ -10,7 +10,5 @@ from . import is_mem_var
 from . import res_users
 from . import res_company
 
-# Fichiers repris d'is_alencon (suffixe _alencon : héritent des fichiers ci-dessus, à charger après)
-from . import is_theia_alencon
-from . import res_company_alencon
+# Fichiers repris d'is_alencon
 from . import is_releve_qt_produite

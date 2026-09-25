@@ -88,7 +88,7 @@ class is_releve_qt_produite(models.Model):
 
     def maj_duree_etat(self):
         "Calcul de la durée de l'état en cours jusqu'à maintenant"
-        cr=self._cr
+        cr=self.env.cr
         for obj in self:
             now = datetime.now(tz=timezone.utc).replace(tzinfo=None)
             domain=[('type_id.code', 'in', ['PE','9000'])]
@@ -99,7 +99,7 @@ class is_releve_qt_produite(models.Model):
 
 
     def creer_lignes_action(self):
-        cr=self._cr
+        cr=self.env.cr
         for obj in self:
             obj.maj_duree_etat()
 
@@ -229,7 +229,7 @@ class is_releve_qt_produite(models.Model):
         for obj in self:
             return {
                 'name': 'Lignes',
-                'view_mode': 'tree',
+                'view_mode': 'list',
                 'res_model': 'is.releve.qt.produite.ligne',
                 'domain': [
                     ('releve_id','=',obj.id),

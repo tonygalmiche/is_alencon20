@@ -48,9 +48,7 @@ class is_etat_presse_regroupement(models.Model):
     couleur          = fields.Selection(couleurs, 'Couleur', required=False, help="Couleur affichée dans l'interface à la presse")
     ordre            = fields.Integer('Ordre', required=False, default=0)
 
-    _sql_constraints = [
-        ('name_uniq', 'unique(name)', u"L'intulé doit être unique !"),
-    ]
+    _name_uniq = models.Constraint('unique(name)', "L'intulé doit être unique !")
 
 
 class is_etat_presse(models.Model):
@@ -70,9 +68,7 @@ class is_etat_presse(models.Model):
     production_serie = fields.Boolean('Production série',help='Cocher cette case si cet état correspond à la production série')
     action_id        = fields.Many2one('is.theia.validation.action', u"Action de validation")
 
-    _sql_constraints = [
-        ('name_uniq', 'unique(name)', u"L'intulé doit être unique !"),
-    ]
+    _name_uniq = models.Constraint('unique(name)', "L'intulé doit être unique !")
 
 
 class is_raspberry_entree_sortie(models.Model):
@@ -218,13 +214,11 @@ class is_of(models.Model):
     prioritaire       = fields.Boolean('Ordre de fabrication prioritaire')
     tx_operateur      = fields.Float(string="Tx Opérateur", digits=(14,3), help="Champ 'Coef Opé' de Silog (CoefOpe)")
     
-    _sql_constraints = [
-        ('name_uniq', 'unique(name)', u"Le numéro d'OF doit être unique !"),
-    ]
+    _name_uniq = models.Constraint('unique(name)', "Le numéro d'OF doit être unique !")
 
 
     def get_id_production_serie(self):
-        cr = self._cr
+        cr = self.env.cr
         SQL="""
             select id from is_etat_presse where name='Production série'
         """
@@ -237,7 +231,7 @@ class is_of(models.Model):
 
 
     def get_cycle_moyen_serie(self):
-        cr = self._cr
+        cr = self.env.cr
         id_production_serie=self.get_id_production_serie()
         nb=len(self)
         ct=0
@@ -267,7 +261,7 @@ class is_of(models.Model):
 
 
     def get_qt_rebut(self):
-        cr = self._cr
+        cr = self.env.cr
         nb=len(self)
         ct=0
         for obj in self:
@@ -287,7 +281,7 @@ class is_of(models.Model):
 
 
     def bilan_fin_of(self):
-        cr = self._cr
+        cr = self.env.cr
 
         id_etat_presse=self.get_id_production_serie()
 
@@ -500,9 +494,7 @@ class is_type_defaut(models.Model):
     name   = fields.Char('Type de défaut' , required=True)
     active = fields.Boolean(u'Actif', default=True)
 
-    _sql_constraints = [
-        ('name_uniq', 'unique(name)', u"Le type de défaut doit être unique !"),
-    ]
+    _name_uniq = models.Constraint('unique(name)', "Le type de défaut doit être unique !")
 
 
 class is_theia_trs(models.Model):
@@ -575,7 +567,7 @@ class is_theia_habilitation_operateur_etat(models.Model):
 
     def init(self):
         start = time.time()
-        cr=self._cr
+        cr=self.env.cr
         tools.drop_view_if_exists(cr, 'is_theia_habilitation_operateur_etat')
         cr.execute("""
             CREATE OR REPLACE view is_theia_habilitation_operateur_etat AS (
@@ -599,50 +591,6 @@ class is_theia_habilitation_operateur_etat(models.Model):
             )
         """)
         _logger.info('## init is_theia_habilitation_operateur_etat en %.2fs'%(time.time()-start))
-
-
-class is_theia_lecture_ip(models.Model):
-    _name = 'is.theia.lecture.ip'
-    _description = u"Lecture des Instructions particulières des opérateurs sur les Moules dans THEIA"
-    _rec_name = "date_heure"
-    _order='date_heure desc'
-
-    date_heure   = fields.Datetime(u'Heure de lecture'                                                    , required=True , index=True)
-    presse_id    = fields.Many2one('is.equipement', u"Equipement"                                             , required=True , index=True)
-    moule        = fields.Char(u'Moule'                                                                   , required=True , index=True)
-    of_ids       = fields.Many2many('is.of', 'is_theia_lecture_ip_of_rel', 'lecture_ip_id', 'of_id', 'OFs', required=False)
-    operateur_id = fields.Many2one("hr.employee", u"Opérateur"                                            , required=True , index=True)
-    ip_id        = fields.Many2one("is.instruction.particuliere", u"Instruction Particulière"             , required=True , index=True)
-
-
-class is_mold(models.Model):
-    _inherit = 'is.mold'
-
-    def dequalification_moule_action(self):
-        cr = self._cr
-        for obj in self:
-            valideur_id = False
-            employes = self.env['hr.employee'].search([('user_id','=',self._uid)])
-            for employe in employes:
-                valideur_id = employe.id
-            SQL="""
-                select distinct presse_id,operateur_id
-                from is_theia_habilitation_operateur
-                where moule=%s order by presse_id,operateur_id
-            """
-            cr.execute(SQL,[obj.name])
-            result = cr.fetchall()
-            for row in result:
-                vals={
-                    "heure_debut" : fields.datetime.now(),
-                    "heure_fin"   : fields.datetime.now(),
-                    "presse_id"   : row[0],
-                    "moule"       : obj.name,
-                    "operateur_id": row[1],
-                    "valideur_id" : valideur_id,
-                    "state"       : "dequalification",
-                }
-                id=self.env['is.theia.habilitation.operateur'].create(vals)
 
 
 class is_theia_alerte_type(models.Model):

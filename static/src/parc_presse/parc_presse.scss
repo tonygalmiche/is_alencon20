@@ -1,0 +1,204 @@
+.parcpresse {
+    background-color:  #e5e7e9 ;
+}
+
+.parcpresse .presse{
+    font-size: 9pt;
+    font-weight: bold;
+    text-align:center;
+    padding:0.4em;
+}
+
+.parcpresse .presse table{
+    border:2px solid black;
+    background-color: white;
+    height:100%;
+    width: 100%;
+    padding:0;
+}
+
+.parcpresse .presse td{
+    border:1px solid black;
+    text-align:center;
+    color:black;
+}
+
+
+.parcpresse .presse .titre{
+    font-size: 13pt;
+    font-weight: bold;
+    line-height: 100%;
+}
+
+
+.parcpresse .presse .valeur{
+    font-size: 13pt;
+    font-weight: bold;
+    color:green;
+    // line-height: 80%;
+}
+
+
+
+
+// Infobulle
+.parcpresse .presse span.info {
+    position: relative;
+    text-decoration: none;
+}
+.parcpresse .presse span.info pre {
+    display: none;
+}
+.parcpresse .presse span.info:hover {
+    background: none; 
+    z-index: 500;
+}
+.parcpresse .presse span.info:hover pre {
+    font-weight: normal;
+    display: inline; 
+    position: absolute;
+    white-space: nowrap; 
+    top: 20px;
+    left: 0px;
+    background: white;
+    color: gray;
+    padding: 3px;
+    border: 1px solid black;
+    border-left: 4px solid black;
+    text-align: left;
+}
+
+
+
+
+
+
+.parc table{
+    border-top:2px solid black;
+    height:100%;
+    width: 100%;
+    padding:0;
+}
+
+.parc td{
+    text-align:center;
+    color:black;
+    font-size: 11pt;
+    font-weight: bold;
+    // line-height: 80%;
+    border:0;
+    vertical-align: middle;
+}
+
+
+.parc .compteur{
+    text-align:center;
+    color:black;
+    font-size: 40pt;
+    font-weight: bold;
+    // line-height: 80%;
+    background-color: red;
+    padding: 0.2em;
+    height:100%;
+}
+
+
+
+
+
+@media (min-height: 400px) {
+    .parcpresse .presse{
+        font-size: 7pt;
+    }
+    .parcpresse .presse .titre{
+        font-size: 7pt;    
+    }
+    .parcpresse .presse .valeur{
+        font-size: 8pt;
+    }
+    .parc .compteur{
+        font-size: 10pt;
+    }
+}
+  
+
+@media (min-height: 600px) {
+    .parcpresse .presse{
+        font-size: 8pt;
+    }
+    .parcpresse .presse .titre{
+        font-size: 10pt;    
+    }
+    .parcpresse .presse .valeur{
+        font-size: 10pt;
+    }
+    .parc .compteur{
+        font-size: 30pt;
+    }
+}
+  
+
+@media (min-height: 800px) {
+    .parcpresse .presse{
+        font-size: 9pt;
+    }
+    .parcpresse .presse .titre{
+        font-size: 13pt;    
+    }
+    .parcpresse .presse .valeur{
+        font-size: 13pt;
+    }
+    .parc .compteur{
+        font-size: 40pt;
+    }
+}
+  
+
+
+// 1400px
+
+@media (min-height: 1400px) {
+    .parcpresse .presse{
+        font-size: 18pt;
+    }
+    .parcpresse .presse .num_presse{
+        font-size: 56pt;    
+        height: 170px; //200px => 170px
+    }
+    .parcpresse .presse .titre{
+        font-size: 36pt;  
+    }
+    .parcpresse .presse .valeur{
+        font-size: 60pt;
+        line-height: 120%;
+    }
+
+    .parcpresse .presse .tdvaleur{
+        height: 120pt;
+        // line-height: 120%;
+    }
+    
+
+    // .parcpresse .presse .tdprogress{
+    //     height: 60px;
+    // }
+    
+
+    .parcpresse .presse .progress{
+        font-size: 20pt;
+        height: 20pt;
+    }
+
+
+ 
+
+    
+    .parc td{
+        font-size: 28pt;
+    }
+
+    .parc .compteur{
+        font-size: 110pt;
+    }
+}
+  

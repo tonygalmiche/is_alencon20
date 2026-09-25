@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- is.releve.qt.produite -->
+        <record id="is_releve_qt_produite_seq" model="ir.sequence">
+            <field name="name">Relevé des qt produites</field>
+            <field name="code">is.releve.qt.produite</field>
+            <field name="prefix"></field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record model="ir.ui.view" id="is_releve_qt_produite_form_view">
+            <field name="name">is_releve_qt_produite_form_view</field>
+            <field name="model">is.releve.qt.produite</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                         <button 
+                            name="creer_lignes_action"
+                            string="Création des lignes"
+                            attrs="{'invisible': [('state', '=', 'valide')]}"
+                            type="object"
+                        />
+                        <button 
+                            name="voir_lignes_action"
+                            string="Voir les lignes"
+                            attrs="{'invisible': [('ligne_ids','=',[])]}"
+                            type="object"
+                        />
+                        <button 
+                            name="vers_valide_action"
+                            string="Valider"
+                            attrs="{'invisible': ['|','|',('state', '=', 'valide'),('alerte','!=',False),('ligne_ids','=',[])]}"
+                            type="object"
+                            confirm="Voulez-vous vraiment valider cette demande ?"
+                        />
+                        <field name="state" widget="statusbar"/>
+                        <field name="ligne_ids" invisible="1"/>
+                    </header>
+                    <sheet>
+                        <div style="background:orange;font-weight: bold;" attrs="{'invisible':[('alerte','=',False)]}">
+                            <field 
+                                name="alerte"
+                                readonly="1" nolabel="1" 
+                                attrs="{'invisible': [('alerte', '=', False)]}"
+                            />
+                        </div>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="date_debut" attrs="{'readonly': [('state', '=', 'valide')]}"/>
+                                <field name="date_fin"   attrs="{'readonly': [('state', '=', 'valide')]}"/>
+                            </group>
+                            <group>
+                                <field name="heure_debut" widget="float_time" attrs="{'readonly': [('state', '=', 'valide')]}"/>
+                                <field name="heure_fin"   widget="float_time" attrs="{'readonly': [('state', '=', 'valide')]}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_releve_qt_produite_tree_view">
+            <field name="name">is_releve_qt_produite_tree_view</field>
+            <field name="model">is.releve.qt.produite</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree decoration-muted="state in ['valide']" decoration-danger="state=='brouillon'">
+                    <field name="name"/>
+                    <field name="date_debut"       optional="hide"/>
+                    <field name="heure_debut"      optional="hide" widget="float_time"/>
+                    <field name="date_fin"         optional="hide"/>
+                    <field name="heure_fin"        optional="hide"  widget="float_time"/>
+                    <field name="date_heure_debut" optional="show"/>
+                    <field name="date_heure_fin"   optional="show"/>
+                    <field name="alerte"           optional="show"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_releve_qt_produite_search_view" >
+            <field name="name">is_releve_qt_produite_search_view</field>
+            <field name="model">is.releve.qt.produite</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="is_releve_qt_produite_action">
+            <field name="name">Relevé des qt produites</field>
+            <field name="res_model">is.releve.qt.produite</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}
+            </field>
+        </record>
+
+
+        <!-- is.releve.qt.produite.ligne -->
+        <record model="ir.ui.view" id="is_releve_qt_produite_ligne_form_view">
+            <field name="name">is_releve_qt_produite_ligne_form_view</field>
+            <field name="model">is.releve.qt.produite.ligne</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="releve_id"/>
+                            <field name="sequence"/>
+                            <field name="equipement_id"/>
+                            <field name="of_id"/>
+                            <field name="moule"/>
+                            <field name="code_article"/>
+                            <field name="designation"/>
+                            <field name="qt_lancement"/>
+                            <field name="qt_bonne"/>
+                            <field name="qt_rebut"/>
+                            <field name="cumul_qt_bonne"/>
+                            <field name="cumul_qt_rebut"/>
+                            <field name="date_debut"/>
+                            <field name="heure_debut"/>
+                            <field name="date_fin"/>
+                            <field name="heure_fin"/>
+                            <field name="tps_production"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_releve_qt_produite_ligne_tree_view">
+            <field name="name">is_releve_qt_produite_ligne_tree_view</field>
+            <field name="model">is.releve.qt.produite.ligne</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" create="false" decoration-danger="alerte">
+                    <field name="releve_id" invisible="1"/>
+                    <field name="sequence"  invisible="1"/>
+                    <field name="equipement_id"     optional="show" readonly="1"/>
+                    <field name="of_id"             optional="show" readonly="1" widget="many2one_clickable"/>
+                    <field name="moule"             optional="show" readonly="1"/>
+                    <field name="code_article"      optional="show" readonly="1"/>
+                    <field name="designation"       optional="show" readonly="1"/>
+                    <field name="qt_lancement"      optional="show" readonly="1"/>
+                    <field name="qt_bonne"          optional="show" attrs="{'readonly': [('state', '=', 'valide')]}"/>
+                    <field name="qt_rebut"          optional="show" attrs="{'readonly': [('state', '=', 'valide')]}"/>
+                    <field name="cumul_qt_bonne"    optional="show" readonly="1"/>
+                    <button 
+                        name="is_alerte_action" type="object" class="oe_stat_button" 
+                        icon="fa-exclamation-triangle"
+                        attrs="{'invisible': [('alerte', '=', False)]}"
+                        title="Qt bonne > Qt Lct"
+                    />
+                    <field name="cumul_qt_rebut"    optional="show" readonly="1"/>
+                    <field name="tps_production"    optional="hide" readonly="1" widget="float_time"/>
+                    <field name="date_debut"        optional="hide" readonly="1"/>
+                    <field name="heure_debut"       optional="hide" readonly="1" widget="float_time"/>
+                    <field name="date_fin"          optional="hide" readonly="1"/>
+                    <field name="heure_fin"         optional="hide" readonly="1" widget="float_time"/>
+                    <field name="alerte"            optional="hide"/>
+                    <field name="state"             invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="is_releve_qt_produite_ligne_search_view" >
+            <field name="name">is_releve_qt_produite_ligne_search_view</field>
+            <field name="model">is.releve.qt.produite.ligne</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="equipement_id"/>
+                    <field name="of_id"/>
+                    <field name="moule"/>
+                    <field name="code_article"/>
+                    <field name="designation"/>
+                    <field name="alerte"/>
+                    <filter name="alerte_filter" string="Qt bonne > Qt Lct" domain="[('alerte','!=',False)]"/>
+                </search>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="is_releve_qt_produite_ligne_action">
+            <field name="name">Lignes du relevé des qt produites</field>
+            <field name="res_model">is.releve.qt.produite.ligne</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}
+            </field>
+        </record>
+    </data>
+</odoo>

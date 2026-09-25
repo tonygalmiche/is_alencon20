@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="is_alencon.parc_presse_template" owl="1">
+        <style>
+            .o_control_panel{
+                display: none;
+            }
+        </style>
+        <Layout display="display">
+            <!-- <div class="row parcpresse" style="height:85vh;"> -->
+            <div class="row parcpresse" style="--gutter-x:0px">
+                <t t-foreach="Object.values(state.equipements or {})" t-as="e" t-key="e.key">
+                    <div class="h-7 col-4 presse">
+                        <table>
+                            <tr style="max-height:36px">
+                                <td t-att-style="e.etat_style" class="num_presse"><t t-esc="e.designation"/></td>
+                                <td t-att-style="e.etat_style" class="titre" colspan="2"><t t-esc="e.etat"/></td>
+                            </tr>
+                            <tr style="vertical-align: center;">
+                                <td style="width:33%" class="tdvaleur">
+                                    <!-- <span class="valeur"> </span> -->
+                                    <div t-if="e.afficher_tx_cycle" >Cycle:</div>
+                                    <div t-if="e.afficher_tx_cycle" class="valeur" t-att-style="e.style_tx_cycle">
+                                        <t t-esc="e.tx_cycle"/>%
+                                    </div>
+                                </td>
+                                <td style="width:34%" class="tdvaleur">
+                                    <!-- <span class="valeur"> </span> -->
+                                    <div t-if="e.afficher_tx_fct" >Fct:</div>
+                                    <div t-if="e.afficher_tx_fct" style="valeur">
+                                        <span 
+                                            class="valeur info" 
+                                            t-att-style="e.style_tx_fct">  
+                                            <t t-esc="e.tx_fct"/>%
+                                            <pre>
+                                                Nb empreintes               : <t t-esc="e.nb_empreintes"/><br />
+                                                Cycle gamme OF              : <t t-esc="e.of_cycle_gamme"/><br />
+                                                Cadence horaire             : <t t-esc="e.cadence_horaire"/><br />
+                                                Quantité théorique éffective: <t t-esc="e.quantite_theorique_effective"/><br />
+                                                Durée effective total       : <t t-esc="e.duree_effective_totale"/><br />
+                                            </pre>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td style="width:33%" class="tdvaleur">
+                                    <!-- <span class="valeur"> </span> -->
+                                    <div t-if="e.afficher_tx_rebut" >Rebut:</div>
+                                    <div t-if="e.afficher_tx_rebut" class="valeur" t-att-style="e.style_tx_rebut">
+                                        <t t-esc="e.tx_rebut"/>%
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="tdprogress">
+                                    <div class="progress">
+                                        <div t-if="e.afficher_tx_avance" class="progress-bar" role="progressbar" t-att-style="e.style_tx_avance" t-att-aria-valuenow="e.tx_avance" aria-valuemin="0" aria-valuemax="100"><t t-esc="e.tx_avance"/>%</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </div>
+            <!-- <div style="height:10vh; background-color:#c4dbf0;" class="parc" > -->
+            <div style="background-color:#c4dbf0;--gutter-x:0px" class="parc" >
+                <table>
+                    <tr>
+                        <td style="width:15%"></td>
+                        <td style="width:25%">TAUX CYCLE</td>
+                        <td style="width:2%"></td>
+                        <td style="width:25%">TAUX FONCTIONNEMENT</td>
+                        <td style="width:2%"></td>
+                        <td style="width:25%">TAUX REBUT</td>
+                        <td style="width:2%"></td>
+                    </tr>
+                    <tr>
+                        <td><t t-esc="state.now_date"/><br /><br /><t t-esc="state.now_heure"/></td>
+                        <td><div class="compteur" t-att-style="state.style_tx_cycle_parc"><t t-esc="state.tx_cycle_parc"/>%</div></td>
+                        <td/>
+                        <td><div class="compteur" t-att-style="state.style_tx_fct_parc">  <t t-esc="state.tx_fct_parc"/>%</div></td>
+                        <td/>
+                        <td><div class="compteur" t-att-style="state.style_tx_rebut_parc"><t t-esc="state.tx_rebut_parc"/>%</div></td>
+                        <td/>
+                    </tr>
+                </table>
+            </div>
+        </Layout>
+    </t>
+</templates>

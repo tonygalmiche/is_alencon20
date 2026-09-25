@@ -21,9 +21,6 @@
                                 <field name='password' password='True' />
                             </group>
                         </group>
-                        <group>
-                            <field name="preventif_equipement_user_ids" widget="many2many_tags"/>
-                        </group>
                     </sheet>
                 </form>
             </field>
@@ -32,25 +29,21 @@
             <field name="name">is_database_tree_view</field>
             <field name="model">is.database</field>
             <field name="arch" type="xml">
-                <tree>
+                <list>
                     <field name='name' />
                     <field name='ip_server' />
                     <field name='port_server' />
                     <field name='database' />
                     <field name='login' />
                     <field name='is_database_origine_id' />
-                </tree>
+                </list>
             </field>
         </record>
         <record id="is_database_action" model="ir.actions.act_window">
             <field name="name">Site</field>
-            <field name="type">ir.actions.act_window</field>
             <field name="res_model">is.database</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
         </record>
-
-
-
 
     </data>
 </odoo>

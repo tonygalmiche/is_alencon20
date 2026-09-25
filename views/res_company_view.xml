@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
+        <!-- Fusion des vues société d'is_plastigray16 et d'is_alencon (même identifiant is_view_company_form dans les deux modules) -->
         <record id="is_view_company_form" model="ir.ui.view">
             <field name="name">is_view_company_form</field>
             <field name="model">res.company</field>
@@ -15,26 +16,11 @@
                     </style>
                 </xpath>
 
-
                 <notebook position="inside">
-                    <page string="Configuration Plastigray">
+                    <page string="THEIA" name="is_theia">
                         <group>
                             <group string="Multi-coeurs">
                                 <field name="is_nb_threads"/>
-                            </group>
-                        </group>
-                        <group>
-                            <group string="Mots de passe">
-                                <field name="is_mysql_pwd"    password="True"/>
-                                <field name="is_dynacase_pwd" password="True"/>
-                                <field name="is_cpta_pwd"     password="True"/>
-                                <field name="is_postgres_host"/>
-                                <field name="is_postgres_user"/>
-                                <field name="is_postgres_pwd" password="True"/>
-                            </group>
-                            <group string="Google Agenda">
-                                <field name="is_agenda_url"/>
-                                <field name="is_agenda_pwd" password="True"/>
                             </group>
                             <group string="Programmes externes">
                                 <field name="is_url_intranet_odoo"/>
@@ -42,87 +28,47 @@
                                 <field name="is_url_odoo_theia"/>
                             </group>
                         </group>
-                        <group string="Gestionnaires">
-                            <field name="is_directeur_general_id"/>
-                            <field name="is_directeur_technique_id"/>
-                            <field name="is_acheteur_id"/>
-                            <field name="is_gest_demande_transport_id"/>
-                            <field name="is_responsable_rh_id" />
-
-
-                        </group>
-                        <group string="THEIA">
-                            <field name="is_code_societe"/>
-                            <field name="is_zebra_id" />
-                        </group>
-                        <group string="SMS via OVH">
-                            <field name="is_sms_account"/>
-                            <field name="is_sms_login"/>
-                            <field name="is_sms_password" password="True"/>
-                            <field name="is_sms_from"/>
-                        </group>
-                        <group string="Base principale (Primaire)">
-                            <field name="is_base_principale"/>
-                        </group>
-                        <group string="PIC à 3 ans">
-                            <field name="is_annee_pic_3ans"/>
-                            <button string="Actualiser" name="annee_pic_3ans_action" type="object" confirm="Prendre en compte imméditement le changement d'année"/>
-                        </group>
                         <group>
-                            <group string="Autre">
-                                <field name="is_cout_ctrl_qualite"/>
-                                <field name="is_dossier_interface_cegid"/>
-                                <field name="is_calendrier_expedition_id"/>
-                                <field 
-                                    name="is_cachet_plastigray" 
-                                    widget="image" class="oe_center oe_avatar" 
-                                    options='{"preview_image": "is_cachet_plastigray", "size": [150, 150]}'
-                                />
-                                <field name="is_activer_init"/>
+                            <group string="Bilan de fin d'OF">
+                                <field name="is_dest_bilan_of_ids" widget="many2many_tags"/>
+                            </group>
+                            <group string="Étiquettes des équipements">
+                                <field name="is_zebra_id" />
                             </group>
                         </group>
                     </page>
+                    <page string="Indicateurs  THEIA" name="is_indicateurs_theia">
+                        <group>
+                            <group string="Couleurs des indicateurs">
+                                <field name="is_indicateur_ids" nolabel="1" colspan="2">
+                                    <list editable="bottom">
+                                        <field name="sequence" widget='handle'/>
+                                        <field name="indicateur"/>
+                                        <field name="color" widget="color"/>
+                                        <field name="limite"/>
+                                    </list>
+                                </field>
+                            </group>
+                            <group string="affichage des indicateurs">
+                                <field name="is_affichage_indicateur_ids" nolabel="1" colspan="2">
+                                    <list editable="bottom">
+                                        <field name="sequence" widget='handle'/>
+                                        <field name="etat_id"/>
+                                        <field name="tx_avance"/>
+                                        <field name="tx_cycle"/>
+                                        <field name="tx_fct"/>
+                                        <field name="tx_rebut"/>
+                                    </list>
+                                </field>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="is_coeff_tx_rebut_parc"/>
+                            <field name="is_dossier_releve_qt_produite"/>
+                        </group>
+                    </page>
                 </notebook>
-                <field name="logo" position="after">
-                    <field name="is_logo" widget="image"  class="oe_avatar oe_left"/>
-                </field>
             </field>
-        </record>
-        <record id="is_view_partner_bank_form" model="ir.ui.view">
-            <field name="name">is_view_partner_bank_form</field>
-            <field name="model">res.partner.bank</field>
-            <field name="inherit_id" ref="base.view_partner_bank_form" />
-            <field name="arch" type="xml">
-                <field name="acc_number" position="after">
-                    <field name="bank_name"/>
-                    <field name="bank_bic"/>
-                    <field name="is_bank_swift"/>
-                </field>
-            </field>
-        </record>
-        <record id="is_view_partner_bank_tree" model="ir.ui.view">
-            <field name="name">is_view_partner_bank_tree</field>
-            <field name="model">res.partner.bank</field>
-            <field name="inherit_id" ref="base.view_partner_bank_tree" />
-            <field name="arch" type="xml">
-                <field name="acc_number" position="after">
-                    <field name="bank_name"/>
-                    <field name="bank_bic"/>
-                    <field name="is_bank_swift"/>
-                </field>
-            </field>
-        </record>
-        <record id="is_res_partner_bank_action" model="ir.actions.act_window">
-            <field name="name">Comptes bancaire</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">res.partner.bank</field>
-            <field name="view_mode">tree,form</field>
-        </record>
-        <record id="is_res_bank_action" model="ir.actions.act_window">
-            <field name="name">Banques</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">res.bank</field>
-            <field name="view_mode">tree,form</field>
         </record>
     </data>
 </odoo>

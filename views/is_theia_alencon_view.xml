@@ -4,7 +4,7 @@
         <record id="alencon_is_of_form_view" model="ir.ui.view">
             <field name="name">alencon_is_of_form_view</field>
             <field name="model">is.of</field>
-            <field name="inherit_id" ref="is_plastigray16.is_of_form_view" />
+            <field name="inherit_id" ref="is_of_form_view" />
             <field name="arch" type="xml">
                 <field name="prioritaire"  position="attributes">
                     <attribute name="readonly">0</attribute> 
@@ -17,7 +17,7 @@
         <record id="alencon_is_of_tree_view" model="ir.ui.view">
             <field name="name">alencon_is_of_tree_view</field>
             <field name="model">is.of</field>
-            <field name="inherit_id" ref="is_plastigray16.is_of_tree_view" />
+            <field name="inherit_id" ref="is_of_tree_view" />
             <field name="arch" type="xml">
                 <field name="coef_cpi" position="after">
                     <field name="tx_operateur" optional="show" sum="Total"/>
@@ -27,7 +27,7 @@
         <record id="alencon_is_theia_presse_form_view" model="ir.ui.view">
             <field name="name">alencon_is_theia_presse_form_view</field>
             <field name="model">is.equipement</field>
-            <field name="inherit_id" ref="is_plastigray16.is_theia_presse_form_view" />
+            <field name="inherit_id" ref="is_theia_presse_form_view" />
             <field name="arch" type="xml">
                 <field name="prioritaire"  position="attributes">
                     <attribute name="readonly">0</attribute> 

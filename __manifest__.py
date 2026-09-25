@@ -34,8 +34,8 @@ Reprise d'is_alencon (Odoo 16) et de la partie THEIA d'is_plastigray16 (version 
         # "views/menu.xml",
 
         # is_alencon
-        # "views/is_theia_alencon_view.xml",
-        # "views/is_releve_qt_produite_view.xml",
+        "views/is_theia_alencon_view.xml",
+        "views/is_releve_qt_produite_view.xml",
         # "views/menu_alencon.xml",
     ],
     "assets": {

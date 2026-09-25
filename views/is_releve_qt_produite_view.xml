@@ -12,38 +12,33 @@
         <record model="ir.ui.view" id="is_releve_qt_produite_form_view">
             <field name="name">is_releve_qt_produite_form_view</field>
             <field name="model">is.releve.qt.produite</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form>
                     <header>
                          <button 
                             name="creer_lignes_action"
                             string="Création des lignes"
-                            attrs="{'invisible': [('state', '=', 'valide')]}"
-                            type="object"
+                            type="object" invisible="state == 'valide'"
                         />
                         <button 
                             name="voir_lignes_action"
                             string="Voir les lignes"
-                            attrs="{'invisible': [('ligne_ids','=',[])]}"
-                            type="object"
+                            type="object" invisible="not ligne_ids"
                         />
                         <button 
                             name="vers_valide_action"
                             string="Valider"
-                            attrs="{'invisible': ['|','|',('state', '=', 'valide'),('alerte','!=',False),('ligne_ids','=',[])]}"
                             type="object"
-                            confirm="Voulez-vous vraiment valider cette demande ?"
+                            confirm="Voulez-vous vraiment valider cette demande ?" invisible="state == 'valide' or alerte or not ligne_ids"
                         />
                         <field name="state" widget="statusbar"/>
                         <field name="ligne_ids" invisible="1"/>
                     </header>
                     <sheet>
-                        <div style="background:orange;font-weight: bold;" attrs="{'invisible':[('alerte','=',False)]}">
+                        <div style="background:orange;font-weight: bold;" invisible="not alerte">
                             <field 
                                 name="alerte"
-                                readonly="1" nolabel="1" 
-                                attrs="{'invisible': [('alerte', '=', False)]}"
+                                readonly="1" nolabel="1" invisible="not alerte"
                             />
                         </div>
                         <group>
@@ -51,28 +46,24 @@
                         </group>
                         <group>
                             <group>
-                                <field name="date_debut" attrs="{'readonly': [('state', '=', 'valide')]}"/>
-                                <field name="date_fin"   attrs="{'readonly': [('state', '=', 'valide')]}"/>
+                                <field name="date_debut" readonly="state == 'valide'"/>
+                                <field name="date_fin" readonly="state == 'valide'"/>
                             </group>
                             <group>
-                                <field name="heure_debut" widget="float_time" attrs="{'readonly': [('state', '=', 'valide')]}"/>
-                                <field name="heure_fin"   widget="float_time" attrs="{'readonly': [('state', '=', 'valide')]}"/>
+                                <field name="heure_debut" widget="float_time" readonly="state == 'valide'"/>
+                                <field name="heure_fin"   widget="float_time" readonly="state == 'valide'"/>
                             </group>
                         </group>
                     </sheet>
-                    <div class="oe_chatter">
-                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
-                        <field name="message_ids" widget="mail_thread"/>
-                    </div>
+                    <chatter/>
                 </form>
             </field>
         </record>
         <record model="ir.ui.view" id="is_releve_qt_produite_tree_view">
             <field name="name">is_releve_qt_produite_tree_view</field>
             <field name="model">is.releve.qt.produite</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree decoration-muted="state in ['valide']" decoration-danger="state=='brouillon'">
+                <list decoration-muted="state in ['valide']" decoration-danger="state=='brouillon'">
                     <field name="name"/>
                     <field name="date_debut"       optional="hide"/>
                     <field name="heure_debut"      optional="hide" widget="float_time"/>
@@ -82,7 +73,7 @@
                     <field name="date_heure_fin"   optional="show"/>
                     <field name="alerte"           optional="show"/>
                     <field name="state"/>
-                </tree>
+                </list>
             </field>
         </record>
         <record model="ir.ui.view" id="is_releve_qt_produite_search_view" >
@@ -97,7 +88,7 @@
         <record model="ir.actions.act_window" id="is_releve_qt_produite_action">
             <field name="name">Relevé des qt produites</field>
             <field name="res_model">is.releve.qt.produite</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
             <field name="context">{}
             </field>
         </record>
@@ -107,7 +98,6 @@
         <record model="ir.ui.view" id="is_releve_qt_produite_ligne_form_view">
             <field name="name">is_releve_qt_produite_ligne_form_view</field>
             <field name="model">is.releve.qt.produite.ligne</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form>
                     <sheet>
@@ -137,24 +127,23 @@
         <record model="ir.ui.view" id="is_releve_qt_produite_ligne_tree_view">
             <field name="name">is_releve_qt_produite_ligne_tree_view</field>
             <field name="model">is.releve.qt.produite.ligne</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree editable="bottom" create="false" decoration-danger="alerte">
-                    <field name="releve_id" invisible="1"/>
-                    <field name="sequence"  invisible="1"/>
+                <list editable="bottom" create="false" decoration-danger="alerte">
+                    <field name="releve_id" column_invisible="1"/>
+                    <field name="sequence" column_invisible="1"/>
                     <field name="equipement_id"     optional="show" readonly="1"/>
-                    <field name="of_id"             optional="show" readonly="1" widget="many2one_clickable"/>
+                    <field name="of_id"             optional="show" readonly="1" widget="many2one"/>
                     <field name="moule"             optional="show" readonly="1"/>
                     <field name="code_article"      optional="show" readonly="1"/>
                     <field name="designation"       optional="show" readonly="1"/>
                     <field name="qt_lancement"      optional="show" readonly="1"/>
-                    <field name="qt_bonne"          optional="show" attrs="{'readonly': [('state', '=', 'valide')]}"/>
-                    <field name="qt_rebut"          optional="show" attrs="{'readonly': [('state', '=', 'valide')]}"/>
+                    <field name="qt_bonne"          optional="show" readonly="state == 'valide'"/>
+                    <field name="qt_rebut"          optional="show" readonly="state == 'valide'"/>
                     <field name="cumul_qt_bonne"    optional="show" readonly="1"/>
                     <button 
                         name="is_alerte_action" type="object" class="oe_stat_button" 
-                        icon="fa-exclamation-triangle"
-                        attrs="{'invisible': [('alerte', '=', False)]}"
+                        icon="warning"
+                        invisible="not alerte"
                         title="Qt bonne > Qt Lct"
                     />
                     <field name="cumul_qt_rebut"    optional="show" readonly="1"/>
@@ -164,8 +153,8 @@
                     <field name="date_fin"          optional="hide" readonly="1"/>
                     <field name="heure_fin"         optional="hide" readonly="1" widget="float_time"/>
                     <field name="alerte"            optional="hide"/>
-                    <field name="state"             invisible="1"/>
-                </tree>
+                    <field name="state"             column_invisible="1"/>
+                </list>
             </field>
         </record>
         <record model="ir.ui.view" id="is_releve_qt_produite_ligne_search_view" >
@@ -186,7 +175,7 @@
         <record model="ir.actions.act_window" id="is_releve_qt_produite_ligne_action">
             <field name="name">Lignes du relevé des qt produites</field>
             <field name="res_model">is.releve.qt.produite.ligne</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
             <field name="context">{}
             </field>
         </record>

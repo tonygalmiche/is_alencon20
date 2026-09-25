@@ -127,9 +127,6 @@ class is_of(models.Model):
         return []
 
 
-
-
-
 class is_equipement(models.Model):
     _inherit = 'is.equipement'
 
@@ -138,9 +135,6 @@ class is_equipement(models.Model):
         "Calcul de la durée de l'état en cours jusqu'à maintenant"
         for obj in self:
             now = datetime.now(tz=timezone.utc).replace(tzinfo=None)
-            #domain=[('type_id.code', 'in', ['PE','9000'])]
-            #equipements = self.env['is.equipement'].search(domain, order="numero_equipement")
-            #for equipement in equipements:
             domain=[('presse_id', '=', obj.id)]
             arrets = self.env['is.presse.arret'].search(domain, order="id desc", limit=1)
             for arret in arrets:
@@ -166,8 +160,6 @@ class is_equipement(models.Model):
                 afficher = getattr(line, indicateur)
                 break
         return afficher
-
-
 
 
     def get_parc_presse(self):
@@ -200,7 +192,6 @@ class is_equipement(models.Model):
 
         filtre=[
             ('ordre','>',0),
-            #('designation','like','50T3'),
         ]
         lines = self.env['is.equipement'].search(filtre, order="ordre,numero_equipement",limit=300)
         equipements=[]
@@ -317,13 +308,6 @@ class is_equipement(models.Model):
                 'quantite_theorique_effective': round(quantite_theorique_effective,2),
                 'duree_effective_totale'      : round(duree_effective_totale,2),
 
-                # #** Taux de fonctionnement ************************************
-                # #cadence_horaire =  round(of.nb_empreintes * 3600 / of.cycle_gamme,2)
-                # cadence_horaire =  round(3600 / of.cycle_gamme,2)
-                # quantite_theorique_effective = cadence_horaire * duree_effective_totale
-                # if quantite_theorique_effective>0:
-                #     tx_fct = int(100 * of.qt_declaree / quantite_theorique_effective)
-                # #**************************************************************
 
                 'tx_avance'        : tx_avance,
                 'tx_cycle'         : tx_cycle,

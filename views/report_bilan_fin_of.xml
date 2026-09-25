@@ -4,7 +4,6 @@
 
         <template id="bilan_fin_of_template">
             <t t-set="company" t-value="res_company"/>
-            <!-- <t t-set="data_report_landscape" t-value="True"/> TODO : Permet de passer en mode paysage --> 
             <t t-call="web.basic_layout">
                 <t t-foreach="docs" t-as="o">
                     <!-- header -->
@@ -214,29 +213,6 @@
 
 
 
-<!--     
-        <template id="bilan_fin_of_report_style">
-       
-
-        </template>
-
-
-
-        <template id="bilan_fin_of_report_document">
-            <t t-call="is_plastigray16.bilan_fin_of_report_external_layout">
-
-            </t>
-        </template>
-
-        <template id="bilan_fin_of_report">
-            <t t-call="is_plastigray16.bilan_fin_of_report_html_container">
-                <t t-foreach="docs" t-as="o">
-                    <t t-call="is_plastigray16.bilan_fin_of_report_document">
-                        <t t-raw="0"/>
-                    </t>
-                </t>
-            </t>
-        </template> -->
 
     </data>
 </odoo>

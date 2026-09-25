@@ -139,11 +139,6 @@
                     <field name="name"/>
                     <field name="employee"/>
                     <field name="commentaire"/>
-                    <!-- <group expand="0" string="Regroupé par...">
-                        <filter name="group_employee"  string="Employé" context="{'group_by':'employee'}"/>
-                        <filter name="group_mois"      string="Mois"    context="{'group_by':'name:month'}"/>
-                        <filter name="group_semaine"   string="Semaine" context="{'group_by':'name:week'}"/>
-                    </group> -->
                 </search>
             </field>
         </record>

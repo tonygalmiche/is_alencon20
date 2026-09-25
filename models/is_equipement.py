@@ -236,18 +236,6 @@ class is_equipement(models.Model):
     _order = 'type_id,numero_equipement,designation'
     _rec_name="numero_equipement"
 
-    # def name_get(self):
-    #     res = []
-    #     for obj in self:
-    #         name=obj.numero_equipement
-    #         res.append((obj.id,name))
-    #     return res
-
-    # @api.model
-    # def _name_search(self, name='', args=None, operator='ilike', limit=100, name_get_uid=None):
-    #     if name:
-    #         args.append(['numero_equipement','ilike', name])
-    #     return super()._name_search(name=name, args=args, operator=operator, limit=limit, name_get_uid=name_get_uid)
 
     @api.depends('type_id')
     def _compute(self):

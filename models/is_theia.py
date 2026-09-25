@@ -3,7 +3,6 @@ from odoo import models,fields,api,tools
 import time
 import datetime
 import os
-#import subprocess
 from odoo.exceptions import ValidationError
 import logging
 _logger = logging.getLogger(__name__)
@@ -91,14 +90,11 @@ class is_raspberry_entree_sortie(models.Model):
             obj.couleur=couleur
 
 
-
-
     raspberry_id  = fields.Many2one('is.raspberry', 'Raspberry', required=True, ondelete='cascade', readonly=True)
     numero        = fields.Char(u'Numéro', required=True, index=True)
     entree_sortie = fields.Char(u'Entrée / Sortie', required=True, index=True)
     etat          = fields.Selection(etats_sorties, u'État', required=True, index=True)
     couleur       = fields.Char(u'Couleur', compute='_couleur')
-
 
 
     def changer_etat_action(self):
@@ -113,7 +109,6 @@ class is_raspberry_entree_sortie(models.Model):
             cmd="ssh -o ConnectTimeout=2 -o StrictHostKeyChecking=no root@"+IP+' "service theia restart"'
             obj.raspberry_id.rafraichir_sorties()
             return True
-
 
 
 class is_raspberry_zebra(models.Model):
@@ -178,29 +173,6 @@ class is_raspberry(models.Model):
             res=subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell = True).strip()
 
             _logger.info("is_raspberry : rafraichir_sorties : %s : %s : %s"%(obj.name, sorties, res))
-
-
-            #TODO : Le rafraissement ne fonctionne pas toujours (1 fois sur 2)
-            #cmd="ssh -o ConnectTimeout=2 -o StrictHostKeyChecking=no root@"+IP+' "export XAUTHORITY=/home/pi/.Xauthority; export DISPLAY=:0; xdotool search --class chromium | tail -1"'
-            #WID=subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell = True).strip()
-            #print WID,type(WID)
-            #cmd="ssh -o ConnectTimeout=2 -o StrictHostKeyChecking=no root@"+IP+' "export XAUTHORITY=/home/pi/.Xauthority; export DISPLAY=:0 && xdotool windowfocus '+WID+' && xdotool key --window '+WID+' Shift_L+F1"'  #Shift_L+F2
-            #res=subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell = True).strip()
-            #print res,type(res)
-
-            #cmd="export XAUTHORITY=/home/pi/.Xauthority; export DISPLAY=:0 && xdotool windowfocus "+WID+" && xdotool key --window "+WID+" Shift_L+F2"
-
-
-            #Envoi d'une série de touche au clavier (ex : Badge RFID) (pour test)
-            #cmd="ssh -o ConnectTimeout=2 root@"+IP+' "export XAUTHORITY=/home/pi/.Xauthority; export DISPLAY=:0; xdotool search --class chromium | tail -1"'
-            #WID=subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell = True).strip()
-            #cmd="ssh -o ConnectTimeout=2 root@"+IP+' "export XAUTHORITY=/home/pi/.Xauthority; export DISPLAY=:0 && xdotool windowfocus '+WID+' && xdotool type --window '+WID+' 3742554362 && xdotool key --window '+WID+' KP_Enter"'
-            #res=subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell = True).strip()
-
-
-
-
-
 
 
 class is_of(models.Model):
@@ -420,7 +392,6 @@ class is_of(models.Model):
             obj.taux_rebut_theo = taux_rebut_theo
             #*******************************************************************
         return []
-
 
 
 class is_of_tps(models.Model):

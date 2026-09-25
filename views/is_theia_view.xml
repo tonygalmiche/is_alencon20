@@ -355,14 +355,6 @@
         <field name="model">is.of</field>
         <field name="arch" type="xml">
         <form>
-            <!-- <header>
-                <button 
-                    name="envoyer_par_mail_action"
-                    string="Envoyer par mail le blian de fin d'OF"
-                    type="object"
-                    groups="base.group_system"
-                />
-            </header> -->
             <sheet>
                 <group>
                     <group>
@@ -432,7 +424,6 @@
         <field name="name">is_of_gestionnaire_form_view</field>
         <field name="model">is.of</field>
         <field name="inherit_id" ref="is_of_form_view"/>
-        <!-- <field name="groups_id" eval="[(4, ref('group_gestionnaire_cpi_raspberry'))]"/> -->
         <field name="arch" type="xml">
             <field name="coef_cpi" position="replace">
                 <field name="coef_cpi"/>
@@ -966,18 +957,6 @@
 
     <!-- Lancement automatisé du calcul du bilan de fin d'OF -->
     <!-- TODO : Fonction désactivée car pb d'accès concurrent avec les Raspberry -->
-    <!-- <record forcecreate="True" id="is_bilan_fin_of_scheduler_action" model="ir.cron">
-        <field name="name">Bilan de fin d'OF</field>
-        <field eval="False" name="active"/>
-        <field name="user_id" ref="base.user_root"/>
-        <field name="interval_number">10</field>
-        <field name="interval_type">minutes</field>
-        <field name="numbercall">-1</field>
-        <field eval="False" name="doall"/>
-        <field eval="'is.of'" name="model"/>
-        <field eval="'run_bilan_fin_of_scheduler_action'" name="function"/>
-        <field eval="'(True,)'" name="args"/>
-    </record> -->
 
 
     <!-- is.theia.trs -->

@@ -116,7 +116,6 @@
             <field name="name">is_view_employee_form_manager</field>
             <field name="model">hr.employee</field>
             <field name="inherit_id" ref="is_plastigray16.is_view_employee_form" />
-            <!-- <field name="groups_id" eval="[(4, ref('hr.group_hr_user'))]"/> -->
             <field name="arch" type="xml">
                 <field name="is_site"  groups="hr.group_hr_user" position="attributes"><attribute name="readonly" position="replace"/></field>
                 <field name="is_matricule"   position="attributes"><attribute name="readonly" position="replace"/></field>
@@ -204,27 +203,6 @@
                         <field name="is_interimaire"/>
                         <field name="is_pointage"/>
                     </field>
-                    <!-- Filtres pré-enregistrés -->
-                    <!-- <group string="Group By" position="before">
-                        <group string="Filtres">
-                            <filter string="Employés"     name="is_interimaire" domain="[('is_interimaire','!=',True)]" />
-                            <filter string="Intérimaires" name="is_interimaire" domain="[('is_interimaire','=',True)]" />
-                            <filter string="Pointages"    name="is_pointage"    domain="[('is_pointage','=',True)]" />
-                        </group>
-                    </group> -->
-                    <!-- Group by -->
-                    <!-- <filter string="Manager" position="before">
-                        <filter string="Site"        context="{'group_by': 'is_site'}"/>
-                        <filter string="Catégorie"   context="{'group_by': 'is_categorie'}"/>
-                        <filter string="Intérimaire" context="{'group_by': 'is_interimaire'}"/>
-                        <filter string="Pointage"    context="{'group_by': 'is_pointage'}"/>
-                    </filter> -->
-                    <!-- Filtres permettant d'afficher des colonnes -->
-                    <!-- <group string="Group By" position="after">
-                        <group string="Afficher les champs">
-                            <filter string="Horaires" context="{'invisible_horaire': False}" />
-                        </group>
-                    </group> -->
              </field>
          </record>
 

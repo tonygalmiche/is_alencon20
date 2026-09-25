@@ -51,27 +51,8 @@ class is_releve_qt_produite(models.Model):
                     alerte = "Date de début > Date de fin"
                 else:
                     alertes=[]
-                    # #** Test date_heure_debut *********************************
-                    # domain=[
-                    #     ('date_heure_debut','<', obj.date_heure_debut),
-                    #     ('date_heure_fin'  ,'>', obj.date_heure_debut),
-                    # ]
-                    # lines = self.env['is.releve.qt.produite'].search(domain)
-                    # for line in lines:
-                    #     if line.name not in alertes and line.name!=obj.name:
-                    #         alertes.append(line.name)
 
-                    # #** Test date_heure_fin *********************************
-                    # domain=[
-                    #     ('date_heure_debut','<', obj.date_heure_fin),
-                    #     ('date_heure_fin'  ,'>', obj.date_heure_fin),
-                    # ]
-                    # lines = self.env['is.releve.qt.produite'].search(domain)
-                    # for line in lines:
-                    #     if line.name not in alertes and line.name!=obj.name:
-                    #         alertes.append(line.name)
-
-                    #TODO : Correction du 02/05/2025 suite bug avec code ci-dessus
+                    #TODO : Correction du 02/05/2025 (bug de détection des relevés qui se chevauchent)
                     domain=[
                         ('date_heure_debut','<', obj.date_heure_fin),
                         ('date_heure_fin'  ,'>', obj.date_heure_debut),
@@ -114,11 +95,6 @@ class is_releve_qt_produite(models.Model):
             equipements = self.env['is.equipement'].search(domain, order="numero_equipement")
             for equipement in equipements:
                 equipement.maj_duree_etat()
-                # domain=[('presse_id', '=', equipement.id)]
-                # arrets = self.env['is.presse.arret'].search(domain, order="id desc", limit=1)
-                # for arret in arrets:
-                #     tps_arret = (now - arret.date_heure).total_seconds()/3600
-                #     arret.tps_arret = tps_arret
         cr.commit()
 
 
@@ -187,17 +163,6 @@ class is_releve_qt_produite(models.Model):
 
                 #** Recherche tps production effective ************************
                 duree_effective_totale = 0
-                # SQL="""
-                #     select 
-                #         ipa.date_heure heure_debut,
-                #         (ipa.date_heure + (interval '1 hour' * ipa.tps_arret)) heure_fin,
-                #         ipa.tps_arret
-                #     from is_presse_arret ipa  join is_presse_arret_of_rel rel on ipa.id=rel.is_of_id
-                #     where 
-                #         date_heure>=%s and date_heure<%s and rel.is_presse_arret_id=%s
-                #         and ipa.type_arret_id in ("""+etats_ids+""") 
-                #     order by ipa.id desc
-                # """
 
 
                 SQL="""
@@ -219,27 +184,19 @@ class is_releve_qt_produite(models.Model):
                 for row2 in rows2:
                     duree = (row2['heure_fin'] -  row2['heure_debut'])
                     duree_effective = duree.total_seconds()
-                    #if of_id==1568:
-                    #    print('TEST 1',of_id, row2['heure_debut'],  row2['heure_fin'], duree_effective)
 
                     if row2['heure_debut']<date_debut:
                         delta = (date_debut - row2['heure_debut']).total_seconds()
                         duree_effective = duree_effective - delta
                         if duree_effective<0:
                             duree_effective=0
-                        #if of_id==1568:
-                        #    print('TEST 2',of_id, row2['heure_debut'],  row2['heure_fin'], duree_effective)
 
                     if row2['heure_fin']>date_fin:
                         delta = (row2['heure_fin'] - date_fin).total_seconds()
                         duree_effective = duree_effective - delta
                         if duree_effective<0:
                             duree_effective=0
-                        #if of_id==1568:
-                        #    print('TEST 3',of_id, row2['heure_debut'],  row2['heure_fin'], duree_effective)
 
-                    #if row2['tps_arret']==0 and ct==0:
-                    #    duree_effective = date_fin - row2['heure_debut']
                     duree_effective = round(duree_effective/3600,2)
                     duree_effective_totale += duree_effective
                     ct+=1
@@ -294,7 +251,7 @@ class is_releve_qt_produite(models.Model):
 
             filename="releve-qt-produite-%s.csv"%obj.name         
             with open("/tmp/%s"%filename, 'w', newline='') as csvfile:
-                spamwriter = csv.writer(csvfile, delimiter='\t') #,quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                spamwriter = csv.writer(csvfile, delimiter='\t')
                 val=[
                     "Date de début",
                     "Heure de début",

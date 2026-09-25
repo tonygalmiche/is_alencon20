@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from odoo import api,fields,models,tools,SUPERUSER_ID
-from xmlrpc import client as xmlrpclib
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -17,41 +16,3 @@ class is_database(models.Model):
     login                  = fields.Char('Login'          , required=False)
     password               = fields.Char('Mot de passe'   , required=False)
     is_database_origine_id = fields.Integer("Id d'origine", readonly=True)
-    preventif_equipement_user_ids = fields.Many2many('res.users', 'is_database_preventif_equipement_user_ids_rel', 'database_id','user_id', string=u"Destinataires mails préventif équipement")
-
-
-    def copy_other_database(self, obj, filtre=False):
-        if not filtre:
-            filtre=[('name', '=', obj.name)]
-        databases = self.env['is.database'].search([])
-        for database in databases:
-            if obj and database.ip_server and database.database and database.port_server and database.login and database.password:
-                model     = obj._name
-                DB        = database.database
-                USERID    = 2
-                DBLOGIN   = database.login
-                USERPASS  = database.password
-                DB_SERVER = database.ip_server
-                DB_PORT   = database.port_server
-
-                _logger.info("copy_other_database : DB=%s : DB_SERVER=%s : DB_PORT=%s : model=%s"%(DB,DB_SERVER,DB_PORT,model))
-
-                sock = xmlrpclib.ServerProxy('http://%s:%s/xmlrpc/object' % (DB_SERVER, DB_PORT))
-                vals = obj.get_copy_other_database_vals(DB, USERID, USERPASS, sock)
-                try:
-                    getattr(obj, 'active')
-                    filtre_origine_id=[('is_database_origine_id', '=', obj.id),'|',('active','=',True),('active','=',False)]
-                except AttributeError as e:
-                    filtre_origine_id=[('is_database_origine_id', '=', obj.id)]
-                ids = sock.execute(DB, USERID, USERPASS, model, 'search', filtre_origine_id)
-                if not ids:
-                    ids = sock.execute(DB, USERID, USERPASS, model, 'search', filtre)
-                if ids:
-                    res=sock.execute(DB, USERID, USERPASS, model, 'write', ids, vals)
-                    _logger.info("write : database=%s : model=%s : ids=%s : vals=%s : res=%s"%(DB,model,ids,vals,res))
-                else:
-                    res=sock.execute(DB, USERID, USERPASS, model, 'create', vals)
-                    _logger.info("create : database=%s : model=%s : vals=%s : id=%s"%(DB,model,vals,res))
-        return True
-
-

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from odoo import models,fields,api,tools,SUPERUSER_ID
 from odoo.exceptions import ValidationError
-from odoo.osv import expression
 from datetime import datetime, timezone
 from dateutil import tz
+import subprocess
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -22,54 +22,6 @@ class is_equipement_champ_line(models.Model):
     equipement_type_id     = fields.Many2one("is.equipement.type", "Type Equipement")
     is_database_origine_id = fields.Integer("Id d'origine", readonly=True, index=True)
     active                 = fields.Boolean('Active', default=True)
-
-    def write(self, vals):
-        res=super().write(vals)
-        for obj in self:
-            filtre=[('is_database_origine_id', '=', obj.is_database_origine_id),'|',('active','=',True),('active','=',False)]
-            self.env['is.database'].copy_other_database(obj,filtre)
-        return res
-            
-    @api.model_create_multi
-    def create(self, vals_list):
-        res=super().create(vals_list)
-        for obj in res:
-            filtre=[('is_database_origine_id', '=', obj.is_database_origine_id),'|',('active','=',True),('active','=',False)]
-            self.env['is.database'].copy_other_database(obj,filtre)
-        return res
-
-    def unlink(self):
-        res=super().unlink()
-        self.env['is.database'].unlink_other_database(self)
-        return(res)
-
-    def get_copy_other_database_vals(self, DB, USERID, USERPASS, sock):
-        vals ={
-            'name'                  : self._get_name(DB, USERID, USERPASS, sock),
-            'vsb'                   : self.vsb,
-            'obligatoire'           : self.obligatoire,
-            'equipement_type_id'    : self._get_equipement_type_id(DB, USERID, USERPASS, sock),
-            'active'                : self.active,
-            'is_database_origine_id': self.id
-        }
-        return vals
-
-    def _get_name(self, DB, USERID, USERPASS, sock):
-        if self.name:
-            ids = sock.execute(DB, USERID, USERPASS, 'ir.model.fields', 'search', [('model_id.model', '=', 'is.equipement'),('name', '=', self.name.name)])
-            if ids:
-                return ids[0]
-        return False
-
-    def _get_equipement_type_id(self, DB, USERID, USERPASS, sock):
-        if self.equipement_type_id:
-            ids = sock.execute(DB, USERID, USERPASS, 'is.equipement.type', 'search', [('is_database_origine_id', '=', self.equipement_type_id.id)])
-            if not ids:
-                self.env['is.database'].copy_other_database(self.equipement_type_id)
-                ids = sock.execute(DB, USERID, USERPASS, 'is.equipement.type', 'search', [('is_database_origine_id', '=', self.equipement_type_id.id)])
-            if ids:
-                return ids[0]
-        return False
 
     @api.constrains('name', 'equipement_type_id')
     def check_unique_so_record(self):
@@ -109,45 +61,6 @@ class is_equipement_type(models.Model):
             return True
 
 
-    def write(self, vals):
-        res=super().write(vals)
-        for obj in self:
-            filtre=[('code', '=', obj.code),'|',('active','=',True),('active','=',False)]
-            self.env['is.database'].copy_other_database(obj,filtre)
-        return res
-            
-    @api.model_create_multi
-    def create(self, vals_list):
-        res=super().create(vals_list)
-        for obj in res:
-            filtre=[('code', '=', obj.code),'|',('active','=',True),('active','=',False)]
-            self.env['is.database'].copy_other_database(obj,filtre)
-        return res
-
-    def unlink(self):
-        res=super().unlink()
-        self.env['is.database'].unlink_other_database(self)
-        return(res)
-
-    def get_copy_other_database_vals(self, DB, USERID, USERPASS, sock):
-        vals ={
-            'name'                  : self.name,
-            'code'                  : self.code,
-            'active'                : self.active,
-            'champ_line_ids'        : self._get_champ_line_ids(DB, USERID, USERPASS, sock),
-            'is_database_origine_id': self.id
-        }
-        return vals
-
-    def _get_champ_line_ids(self,  DB, USERID, USERPASS, sock):
-        list_champ_line_ids =[]
-        for line in self.champ_line_ids:
-            ids = sock.execute(DB, USERID, USERPASS, 'is.equipement.champ.line', 'search', [('is_database_origine_id', '=', line.id)])
-            if ids:
-                list_champ_line_ids.append(ids[0])
-        return [(6, 0, list_champ_line_ids)]
-
-
 class is_presse_classe(models.Model):
     _name='is.presse.classe'
     _description="Classe presse"
@@ -156,26 +69,6 @@ class is_presse_classe(models.Model):
     name = fields.Char(string='Classe commerciale')
     is_database_origine_id = fields.Integer("Id d'origine", readonly=True)
    
-    def write(self, vals):
-        res=super().write(vals)
-        for obj in self:
-            self.env['is.database'].copy_other_database(obj)
-        return res
-            
-    @api.model_create_multi
-    def create(self, vals_list):
-        res=super().create(vals_list)
-        self.env['is.database'].copy_other_database(res)
-        return res
-
-    def get_copy_other_database_vals(self, DB, USERID, USERPASS, sock):
-        vals ={
-            'name'                  : self.name,
-            'is_database_origine_id': self.id
-        }
-        return vals
-
-
 class is_presse_puissance(models.Model):
     _name='is.presse.puissance'
     _description="Puissance presse"
@@ -184,25 +77,6 @@ class is_presse_puissance(models.Model):
     name                   = fields.Char(string='Puissance')
     is_database_origine_id = fields.Integer("Id d'origine", readonly=True)
     
-    def write(self, vals):
-        res=super().write(vals)
-        for obj in self:
-            self.env['is.database'].copy_other_database(obj)
-        return res
-            
-    @api.model_create_multi
-    def create(self, vals_list):
-        res=super().create(vals_list)
-        self.env['is.database'].copy_other_database(res)
-        return res
-
-    def get_copy_other_database_vals(self, DB, USERID, USERPASS, sock):
-        vals ={
-            'name'                  : self.name,
-            'is_database_origine_id': self.id
-        }
-        return vals
-
 class is_outillage_constructeur(models.Model):
     _name='is.outillage.constructeur'
     _description="Outillage constructeur"
@@ -211,26 +85,6 @@ class is_outillage_constructeur(models.Model):
     name = fields.Char(string='Name')
     is_database_origine_id = fields.Integer("Id d'origine", readonly=True)
     
-    def write(self, vals):
-        res=super().write(vals)
-        for obj in self:
-            self.env['is.database'].copy_other_database(obj)
-        return res
-            
-    @api.model_create_multi
-    def create(self, vals_list):
-        res=super().create(vals_list)
-        self.env['is.database'].copy_other_database(res)
-        return res
-
-    def get_copy_other_database_vals(self, DB, USERID, USERPASS, sock):
-        vals ={
-            'name'                  : self.name,
-            'is_database_origine_id': self.id
-        }
-        return vals
-
-
 class is_equipement(models.Model):
     _name = "is.equipement"
     _description="is_equipement"
@@ -252,217 +106,10 @@ class is_equipement(models.Model):
                 exclude = ["is_database_origine_id","active","type_id","numero_equipement","designation","database_id"]
                 if cl.name.name not in exclude:
                     if cl.vsb:
-                        print(cl.vsb, cl.name, cl.name.name)
                         setattr(obj, cl.name.name + '_vsb', True)
                     if cl.obligatoire:
                         setattr(obj, cl.name.name + '_obl', True)
 
-
-    def write(self, vals):
-        res=super().write(vals)
-        for obj in self:
-            filtre=[('is_database_origine_id', '=', obj.is_database_origine_id),'|',('active','=',True),('active','=',False)]
-            self.env['is.database'].copy_other_database(obj,filtre)
-        return res
-            
-    @api.model_create_multi
-    def create(self, vals_list):
-        res=super().create(vals_list)
-        for obj in res:
-            filtre=[('is_database_origine_id', '=', obj.is_database_origine_id),'|',('active','=',True),('active','=',False)]
-            self.env['is.database'].copy_other_database(obj,filtre)
-        return res
-
-    def unlink(self):
-        res=super().unlink()
-        self.env['is.database'].unlink_other_database(self)
-        return(res)
-
-    def get_copy_other_database_vals(self, DB, USERID, USERPASS, sock):
-        vals ={
-
-            'numero_equipement'                     : self.numero_equipement,
-            'designation'                           : self.designation,
-            'database_id'                           : self._get_database_id(DB, USERID, USERPASS, sock),
-            'equipement_cle'                        : self.equipement_cle,
-            'type_id'                               : self._get_type_id(DB, USERID, USERPASS, sock),
-            'constructeur'                          : self.constructeur,
-            'constructeur_serie'                    : self.constructeur_serie,
-            'partner_id'                            : self._get_partner_id(DB, USERID, USERPASS, sock),
-            'date_fabrication'                      : self.date_fabrication,
-            'date_de_fin'                           : self.date_de_fin,
-            'maintenance_preventif_niveau1'         : self.maintenance_preventif_niveau1,
-            'maintenance_preventif_niveau2'         : self.maintenance_preventif_niveau2,
-            'maintenance_preventif_niveau3'         : self.maintenance_preventif_niveau3,
-            'maintenance_preventif_niveau4'         : self.maintenance_preventif_niveau4,
-            'type_presse_commande'                  : self.type_presse_commande,
-            'classe_id'                             : self._get_classe_id(DB, USERID, USERPASS, sock),
-            'classe_commerciale'                    : self.classe_commerciale,
-            'force_fermeture'                       : self.force_fermeture,
-            'energie'                               : self.energie,
-            'dimension_entre_col_h'                 : self.dimension_entre_col_h,
-            'faux_plateau'                          : self.faux_plateau,
-            'dimension_demi_plateau_h'              : self.dimension_demi_plateau_h,
-            'dimension_hors_tout_haut'              : self.dimension_hors_tout_haut,
-            'dimension_entre_col_v'                 : self.dimension_entre_col_v,
-            'epaisseur_moule_mini_presse'           : self.epaisseur_moule_mini_presse,
-            'epaisseur_faux_plateau'                : self.epaisseur_faux_plateau,
-            'epaisseur_moule_maxi'                  : self.epaisseur_moule_maxi,
-            'dimension_demi_plateau_v'              : self.dimension_demi_plateau_v,
-            'dimension_hors_tout_bas'               : self.dimension_hors_tout_bas,
-            'coefficient_vis'                       : self.coefficient_vis,
-            'type_de_clapet'                        : self.type_de_clapet,
-            'pression_maximum'                      : self.pression_maximum,
-            'pression_maximum2'                     : self.pression_maximum2,
-            'vis_mn'                                : self.vis_mn,
-            'vis_mn2'                               : self.vis_mn2,
-            'volume_injectable'                     : self.volume_injectable,
-            'volume_injectable2'                    : self.volume_injectable2,
-            'course_ejection'                       : self.course_ejection,
-            'course_ouverture'                      : self.course_ouverture,
-            'centrage_moule'                        : self.centrage_moule,
-            'centrage_moule2'                       : self.centrage_moule2,
-            'centrage_presse'                       : self.centrage_presse,
-            'hauteur_porte_sol'                     : self.hauteur_porte_sol,
-            'bridage_rapide_entre_axe'              : self.bridage_rapide_entre_axe,
-            'bridage_rapide_pas'                    : self.bridage_rapide_pas,
-            'bridage_rapide'                        : self.bridage_rapide,
-            'type_huile_hydraulique'                : self.type_huile_hydraulique,
-            'volume_reservoir'                      : self.volume_reservoir,
-            'type_huile_graissage_centralise'       : self.type_huile_graissage_centralise,
-            'nbre_noyau_total'                      : self.nbre_noyau_total,
-            'nbre_noyau_pf'                         : self.nbre_noyau_pf,
-            'nbre_noyau_pm'                         : self.nbre_noyau_pm,
-            'nbre_circuit_eau'                      : self.nbre_circuit_eau,
-            'nbre_zone_de_chauffe_moule'            : self.nbre_zone_de_chauffe_moule,
-            'puissance_electrique_installee'        : self.puissance_electrique_installee,
-            'puissance_electrique_moteur'           : self.puissance_electrique_moteur,
-            'puissance_de_chauffe'                  : self.puissance_de_chauffe,
-            'compensation_cosinus'                  : self.compensation_cosinus,
-            'passage_buse'                          : self.passage_buse,
-            'option_rotation_r1'                    : self.option_rotation_r1,
-            'option_rotation_r2'                    : self.option_rotation_r2,
-            'option_arret_intermediaire'            : self.option_arret_intermediaire,
-            'nbre_circuit_vide'                     : self.nbre_circuit_vide,
-            'nbre_circuit_pression'                 : self.nbre_circuit_pression,
-            'nbre_dentrees_automate_disponibles'    : self.nbre_dentrees_automate_disponibles,
-            'nbre_de_sorties_automate_disponibles'  : self.nbre_de_sorties_automate_disponibles,
-            'dimension_chambre'                     : self.dimension_chambre,
-            'nbre_de_voie'                          : self.nbre_de_voie,
-            'capacite_de_levage'                    : self.capacite_de_levage,
-            'dimension_bande'                       : self.dimension_bande,
-            'dimension_cage'                        : self.dimension_cage,
-            'poids_kg'                              : self.poids_kg,
-            'affectation_sur_le_site'               : self.affectation_sur_le_site,
-            'is_mold_ids'                           : self._get_mold_ids(DB, USERID, USERPASS, sock),
-            'is_dossierf_ids'                       : self._get_dossierf_ids(DB, USERID, USERPASS, sock),
-            'type_de_fluide'                        : self.type_de_fluide,
-            'temperature_maximum'                   : self.temperature_maximum,
-            'puissance_de_refroidissement'          : self.puissance_de_refroidissement,
-            'debit_maximum'                         : self.debit_maximum,
-            'volume_l'                              : self.volume_l,
-            'option_depresssion'                    : self.option_depresssion,
-            'mesure_debit'                          : self.mesure_debit,
-            'base_capacitaire'                      : self.base_capacitaire,
-            'emplacement_affectation_pe'            : self.emplacement_affectation_pe,
-            'adresse_ip_mac'                        : self.adresse_ip_mac,
-            'active'                                : self.database_id and self.database_id.database == DB and self.active or False,
-            'is_database_origine_id'                : self.id,
-        }
-        return vals
-
-    def _get_database_id(self, DB, USERID, USERPASS, sock):
-        if self.database_id:
-            ids = sock.execute(DB, USERID, USERPASS, 'is.database', 'search', [('is_database_origine_id', '=', self.database_id.id)])
-            if ids:
-                return ids[0]
-        return False
-
-    def _get_dossierf_ids(self, DB, USERID, USERPASS, sock):
-        list_dossierf_ids =[]
-        for doss in self.is_dossierf_ids:
-            ids = sock.execute(DB, USERID, USERPASS, 'is.dossierf', 'search', [('is_database_origine_id', '=', doss.id)])
-            if ids:
-                list_dossierf_ids.append(ids[0])
-        return [(6, 0, list_dossierf_ids)]
-
-    def _get_mold_ids(self, DB, USERID, USERPASS, sock):
-        list_mold_ids =[]
-        for mold in self.is_mold_ids:
-            ids = sock.execute(DB, USERID, USERPASS, 'is.mold', 'search', [('is_database_origine_id', '=', mold.id)])
-            if ids:
-                list_mold_ids.append(ids[0])
-        return [(6, 0, list_mold_ids)]
-
-    def _get_type_id(self, DB, USERID, USERPASS, sock):
-        if self.type_id:
-            ids = sock.execute(DB, USERID, USERPASS, 'is.equipement.type', 'search', [('is_database_origine_id', '=', self.type_id.id), '|',('active','=',True),('active','=',False)])
-            if not ids:
-                self.env['is.database'].copy_other_database(self.type_id)
-                ids = sock.execute(DB, USERID, USERPASS, 'is.equipement.type', 'search', [('is_database_origine_id', '=', self.type_id.id), '|',('active','=',True),('active','=',False)])
-            if ids:
-                return ids[0]
-        return False
-
-    def _get_partner_id(self, DB, USERID, USERPASS, sock):
-        if self.partner_id:
-            ids = sock.execute(DB, USERID, USERPASS, 'res.partner', 'search', [('is_database_origine_id', '=', self.partner_id.id),'|',('active','=',True),('active','=',False)])
-            if not ids:
-                self.env['is.database'].copy_other_database(self.partner_id)
-                ids = sock.execute(DB, USERID, USERPASS, 'res.partner', 'search', [('is_database_origine_id', '=', self.partner_id.id),'|',('active','=',True),('active','=',False)])
-            if ids:
-                return ids[0]
-        return False
-
-    def _get_classe_id(self, DB, USERID, USERPASS, sock):
-        if self.classe_id:
-            ids = sock.execute(DB, USERID, USERPASS, 'is.presse.classe', 'search', [('is_database_origine_id', '=', self.classe_id.id)])
-            if not ids:
-                self.env['is.database'].copy_other_database(self.classe_id)
-                ids = sock.execute(DB, USERID, USERPASS, 'is.presse.classe', 'search', [('is_database_origine_id', '=', self.classe_id.id)])
-            if ids:
-                return ids[0]
-        return False
-
-
-    def arret_raspberry(self, cr, uid, ids, context=None):
-        for obj in self.browse(cr, uid, ids, context=context):
-            if obj.raspberry_id:
-                IP=obj.raspberry_id.name
-                cmd="ssh root@"+IP+" halt"
-                os.system(cmd)
-        return
-
-    def reboot_raspberry(self, cr, uid, ids, context=None):
-        for obj in self.browse(cr, uid, ids, context=context):
-            if obj.raspberry_id:
-                IP=obj.raspberry_id.name
-                cmd="ssh root@"+IP+" reboot"
-                os.system(cmd)
-        return
-
-    def rafraichir_raspberry(self, cr, uid, ids, context=None):
-        for obj in self.browse(cr, uid, ids, context=context):
-            if obj.raspberry_id:
-                IP=obj.raspberry_id.name
-                cmd="ssh root@"+IP+" killall midori"
-                os.system(cmd)
-        return
-
-    def interface_presse(self, cr, uid, ids, context=None):
-        presse=""
-        for obj in self.browse(cr, uid, ids, context=context):
-            presse = obj.numero_equipement
-            user   = self.env['res.users'].browse([uid])[0]
-            soc    = user.company_id.is_code_societe
-        url = "http://raspberry-cpi/presse.php?soc="+str(soc)+"&presse="+presse
-        return {
-            'name'     : 'Go to website',
-            'res_model': 'ir.actions.act_url',
-            'type'     : 'ir.actions.act_url',
-            'target'   : 'current',
-            'url'      : url
-        }
 
     def acceder_equipement_action(self):
         for obj in self:
@@ -477,7 +124,7 @@ class is_equipement(models.Model):
 
     def imprimer_etiquette_equipement(self):
         for obj in self:
-            user=self.env['res.users'].browse(self._uid)
+            user=self.env.user
             imprimante=user.company_id.is_zebra_id.name
             if imprimante:
                 Msg          = ""
@@ -537,7 +184,7 @@ class is_equipement(models.Model):
     
     partner_id_vsb                           = fields.Boolean("Fournisseur vsb", compute='_compute')
     partner_id_obl                           = fields.Boolean("Fournisseur obl", compute='_compute')
-    partner_id                               = fields.Many2one("res.partner", "Fournisseur", domain=[('is_company', '=', True), ('supplier', '=', True)])
+    partner_id                               = fields.Many2one("res.partner", "Fournisseur", domain=[('is_company', '=', True)])
     
     date_fabrication_vsb                     = fields.Boolean("Date de fabrication vsb", compute='_compute')
     date_fabrication_obl                     = fields.Boolean("Date de fabrication obl", compute='_compute')
@@ -816,13 +463,7 @@ class is_equipement(models.Model):
     affectation_sur_le_site_obl              = fields.Boolean("Affectation sur le site obl", compute='_compute')
     affectation_sur_le_site                  = fields.Char("Affectation sur le site")
     
-    is_mold_ids_vsb                          = fields.Boolean(u"Moules affectés vsb", compute='_compute')
-    is_mold_ids_obl                          = fields.Boolean(u"Moules affectés obl", compute='_compute')
-    is_mold_ids                              = fields.Many2many("is.mold", "equipement_mold_rel", "equipement_id", "mold_id", u"Moules affectés")
     
-    is_dossierf_ids_vsb                      = fields.Boolean("Dossier F vsb", compute='_compute')
-    is_dossierf_ids_obl                      = fields.Boolean("Dossier F obl", compute='_compute')
-    is_dossierf_ids                          = fields.Many2many("is.dossierf", "equipement_dossierf_rel", "equipement_id", "dossierf_id", "Dossier F")
     
     type_de_fluide_vsb                       = fields.Boolean("Type de fluide vsb", compute='_compute')
     type_de_fluide_obl                       = fields.Boolean("Type de fluide obl", compute='_compute')
@@ -899,11 +540,6 @@ class is_equipement(models.Model):
     prioritaire_obl             = fields.Boolean("prioritaire_obl", compute='_compute')
     prioritaire                 = fields.Boolean('Presse prioritaire')
 
-    zone_id_vsb                 = fields.Boolean("zone_id_vsb", compute='_compute')
-    zone_id_obl                 = fields.Boolean("zone_id_obl", compute='_compute')
-    zone_id                     = fields.Many2one("is.preventif.equipement.zone", "Zone préventif")
-
-
 
     def maj_duree_etat(self):
         "Calcul de la durée de l'état en cours jusqu'à maintenant"
@@ -937,7 +573,7 @@ class is_equipement(models.Model):
 
 
     def get_parc_presse(self):
-        cr = self._cr
+        cr = self.env.cr
         FRA = tz.gettz('Europe/Paris')
         now    = datetime.now()
         now_local = now.astimezone(tz=FRA)

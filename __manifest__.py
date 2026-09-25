@@ -39,7 +39,7 @@ Reprise d'is_alencon (Odoo 16) et de la partie THEIA d'is_plastigray16 (version 
     ],
     "assets": {
         "web.assets_backend": [
-            # "is_alencon20/static/src/parc_presse/*",  # JS Owl 2 : à migrer en Owl 3 avant de le réactiver
+            "is_alencon20/static/src/parc_presse/*",
         ],
         "web.report_assets_common": [
             "is_alencon20/static/src/scss/report.scss",

@@ -1,33 +1,24 @@
-/** @odoo-module **/
+import { Component, onMounted, onWillStart, onWillUnmount, proxy, useProps } from "@odoo/owl";
 import { registry } from "@web/core/registry";
-import { Layout } from "@web/search/layout";
-import { getDefaultConfig } from "@web/views/view";
 import { useService } from "@web/core/utils/hooks";
-
-const { Component, useSubEnv, useState, onWillStart,onMounted,onWillUnmount } = owl;
+import { Layout } from "@web/search/layout";
+import { standardActionServiceProps } from "@web/webclient/actions/action_plugin";
 
 
 class ParcPresse extends Component {
+    static components = { Layout };
+    static template = "is_alencon20.parc_presse_template";
+    props = useProps(standardActionServiceProps);
+
     setup() {
-        this.user_id = useService("user").context.uid;
-        this.action  = useService("action");
-        this.orm     = useService("orm");
-        this.state   = useState({
+        this.orm   = useService("orm");
+        this.state = proxy({
             'equipements': {},
         });
         this._interval=null;
 
-        useSubEnv({
-            config: {
-                ...getDefaultConfig(),
-                ...this.env.config,
-            },
-        });
-        this.display = {
-            controlPanel: { "top-right": false, "bottom-right": false },
-        };
         onWillStart(async () => {
-            this.getParcPresse();
+            await this.getParcPresse();
         });
 
         onMounted(() => {
@@ -39,20 +30,15 @@ class ParcPresse extends Component {
                     }
                 }, 1000 * 60);
             }
-            //***************************************************************** */
+            //*****************************************************************
         });
         onWillUnmount(() => {
             clearInterval(this._interval);
             this._interval=null;
         });
-    } 
-
-    OKclick(ev) {
-        this.getParcPresse(true);
     }
 
-
-    async getParcPresse(ok=false){
+    async getParcPresse(){
         var res = await this.orm.call("is.equipement", 'get_parc_presse', [false]);
         this.state.equipements   = res.equipements;
         this.state.now_date      = res.now_date;
@@ -66,11 +52,4 @@ class ParcPresse extends Component {
      }
 }
 
-
-ParcPresse.components = { Layout };
-ParcPresse.template = "is_alencon.parc_presse_template";
 registry.category("actions").add("is_alencon.parc_presse_registry", ParcPresse);
-
-
-
-

@@ -11,6 +11,18 @@
             <field name="action"    ref="is_releve_qt_produite_action"/>
         </record>
 
+        <!-- THEIA / Parc des presses (écran Owl du module) -->
+        <record model="ir.actions.client" id="parc_presse_actions_client">
+            <field name="name">Parc des presses</field>
+            <field name="tag">is_alencon.parc_presse_registry</field>
+        </record>
+        <record id="parc_presse_menu" model="ir.ui.menu" >
+            <field name="name">Parc des presses</field>
+            <field name="sequence">39</field>
+            <field name="parent_id" eval="ref('is_theia_root_menu')"/>
+            <field name="action"    ref="parc_presse_actions_client"/>
+        </record>
+
         <!-- THEIA / Équipements (menu « Outillages / Equipement » d'is_plastigray16) -->
         <menuitem id="menu_sub_main_is_equipement"     sequence="35" name="Équipements"     parent="is_theia_root_menu" />
         <menuitem id="menu_is_equipement"              sequence="10" name="Equipement"      parent="menu_sub_main_is_equipement" action="action_is_equipement" />

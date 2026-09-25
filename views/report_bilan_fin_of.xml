@@ -122,13 +122,13 @@
                                                         <span t-field="l.etat_presse_id"/>
                                                     </td>
                                                     <td class="text-right" t-attf-style="background-color:{{ l.couleur }}">
-                                                        <t t-esc="'%02d:%02d' % (int(l.tps_arret), l.tps_arret % 1 * 60)" />
+                                                        <t t-out="'%02d:%02d' % (int(l.tps_arret), l.tps_arret % 1 * 60)" />
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <th>Total : </th>
                                                     <th class="text-right">
-                                                        <t t-esc="'%02d:%02d' % (int(tps_arret), tps_arret % 1 * 60)" />
+                                                        <t t-out="'%02d:%02d' % (int(tps_arret), tps_arret % 1 * 60)" />
                                                     </th>
                                                 </tr>
                                             </tbody>
@@ -196,23 +196,9 @@
             <field name="binding_model_id" ref="model_is_of"/>
             <field name="paperformat_id" ref="bilan_fin_of_paperformat"/>
             <field name="report_type">qweb-pdf</field>
-            <field name="report_name">is_plastigray16.bilan_fin_of_template</field>
-            <field name="report_file">is_plastigray16.bilan_fin_of_template</field>
+            <field name="report_name">is_alencon20.bilan_fin_of_template</field>
+            <field name="report_file">is_alencon20.bilan_fin_of_template</field>
         </record>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     </data>
 </odoo>

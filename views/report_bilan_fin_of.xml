@@ -197,7 +197,6 @@
             <field name="paperformat_id" ref="bilan_fin_of_paperformat"/>
             <field name="report_type">qweb-pdf</field>
             <field name="report_name">is_alencon20.bilan_fin_of_template</field>
-            <field name="report_file">is_alencon20.bilan_fin_of_template</field>
         </record>
 
     </data>

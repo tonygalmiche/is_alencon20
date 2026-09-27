@@ -138,7 +138,7 @@
                 <field name="of_ids"/>
                 <field name="employee_id"/>
                 <filter string="Production série + Essai" name="production_serie_essai" domain="['|',('type_arret_id','=',1),('type_arret_id','=',13)]"/>
-                <group expand="0" string="Regroupé par...">
+                <group>
                   <filter name="group_presse_id"     string="Presse"       context="{'group_by':'presse_id'}"/>
                   <filter name="group_type_arret_id" string="Type d'arrêt" context="{'group_by':'type_arret_id'}"/>
                   <filter name="group_mois"          string="Mois"         context="{'group_by':'date_heure:month'}"/>
@@ -195,11 +195,11 @@
             <search>
                 <field name="equipement_id"/>
                 <field name="type_alerte_id"/>
-                <group string="Filtres">
+                <group>
                     <filter string="Alertes inactives" name="alertes_inactives" domain="[('active','=',False)]"/>
                     <filter string="Alertes actives"   name="alertes_actives"   domain="[('active','=',True)]"/>
                 </group>
-                <group string="Regrouper par">
+                <group>
                     <filter string="Process"       name="group_by_process" context="{'group_by': 'equipement_id'}"/>
                     <filter string="Type d'alerte" name="group_by_alerte"  context="{'group_by': 'type_alerte_id'}"/>
                 </group>
@@ -391,7 +391,7 @@
                 <field name="designation"/>
                 <field name="ordre"/>
                 <field name="presse_id"/>
-                <group expand="0" string="Regroupé par...">
+                <group>
                   <filter name="group_presse_id"    string="Presse"         context="{'group_by':'presse_id'}"/>
                   <filter name="group_moule"        string="Moule"          context="{'group_by':'moule'}"/>
                   <filter name="group_code_article" string="Article"        context="{'group_by':'code_article'}"/>
@@ -488,7 +488,7 @@
                 <field name="num_carton"/>
                 <field name="defaut_id"/>
                 <field name="employee_id"/>
-                <group expand="0" string="Regroupé par...">
+                <group>
                   <filter name="group_of_id"     string="OF"             context="{'group_by':'of_id'}"/>
                   <filter name="group_defaut_id" string="Type de défaut" context="{'group_by':'defaut_id'}"/>
                   <filter name="group_mois"      string="Mois"           context="{'group_by':'name:month'}"/>
@@ -692,7 +692,7 @@
                 <field name="regroupement_id"/>
                 <field name="production_serie"/>
                 <field name="couleur"/>
-                <group expand="0" string="Regroupé par...">
+                <group>
                   <filter name="group_couleur"         string="Couleur"                  context="{'group_by':'couleur'}"/>
                   <filter name="group_regroupement_id" string="Regroupement État Presse" context="{'group_by':'regroupement_id'}"/>
                 </group>
@@ -899,7 +899,7 @@
                 <field name="code_article"/>
                 <field name="categorie"/>
                 <field name="moule"/>
-                <group expand="0" string="Regroupé par...">
+                <group>
                   <filter name="group_annee"        string="Année"     context="{'group_by':'date_heure:year'}"/>
                   <filter name="group_mois"         string="Mois"      context="{'group_by':'date_heure:month'}"/>
                   <filter name="group_semaine"      string="Semaine"   context="{'group_by':'date_heure:week'}"/>
@@ -1078,7 +1078,7 @@
                 <field name="operateur_id"/>
                 <field name="valideur_id"/>
                 <field name="state"/>
-                <group expand="0" string="Regrouper par...">
+                <group>
                     <filter name="group_by_presse_id"    string="Presse" domain="[]" context="{'group_by':'presse_id'}"/>
                     <filter name="group_by_moule"        string="Moule" domain="[]" context="{'group_by':'moule'}"/>
                     <filter name="group_by_operateur_id" string="Opérateur" domain="[]" context="{'group_by':'operateur_id'}"/>
@@ -1150,7 +1150,7 @@
                 <field name="moule" />
                 <field name="operateur_id" />
                 <field name="state" />
-               <group expand="0" string="Regrouper par...">
+               <group>
                     <filter name="group_by_presse_id"    string="Presse"    domain="[]" context="{'group_by':'presse_id'}"/>
                     <filter name="group_by_moule"        string="Moule"     domain="[]" context="{'group_by':'moule'}"/>
                     <filter name="group_by_operateur_id" string="Opérateur" domain="[]" context="{'group_by':'operateur_id'}"/>

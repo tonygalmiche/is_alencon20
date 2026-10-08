@@ -1,6 +1,5 @@
 id,name,model_id,group_id/id,operation,domain
 access_is_ilot,access_is_ilot,is.ilot,base.group_user,r,
-access_gestionnaire_is_ilot,access_gestionnaire_is_ilot,is.ilot,base.group_user,r,
 access_is_mem_var,access_is_mem_var,is.mem.var,base.group_user,crud,
 access_is_database,access_is_database,is.database,base.group_user,r,
 access_is_database_manager,access_is_database_manager,is.database,base.group_system,crud,

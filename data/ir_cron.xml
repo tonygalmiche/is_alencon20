@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Reprise de scripts-externes/THEIA-bilan-fin-of.py (crontab d'odoo : 10 * * * 1-6) -->
+        <record id="is_of_bilan_fin_of_cron" model="ir.cron">
+            <field name="name">THEIA : Bilan fin OF (OF terminés depuis la veille et OF en cours)</field>
+            <field name="model_id" ref="model_is_of"/>
+            <field name="state">code</field>
+            <field name="code">model.bilan_fin_of_planifie()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="nextcall" eval="(DateTime.now().replace(minute=10, second=0) + timedelta(hours=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+</odoo>

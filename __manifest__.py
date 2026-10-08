@@ -24,6 +24,7 @@ Reprise d'is_alencon (Odoo 16) et de la partie THEIA d'is_plastigray16 (version 
         # is_plastigray16
         "security/res.groups.xml",
         "security/ir.access.csv",
+        "data/ir_cron.xml",
         "views/report_bilan_fin_of.xml", # avant is_theia_view.xml : bouton d'impression dans la fiche de l'OF
         "views/is_database_view.xml",
         "views/is_equipement_view.xml",

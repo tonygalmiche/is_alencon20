@@ -4,6 +4,7 @@ import time
 import datetime
 import os
 import subprocess
+from zoneinfo import ZoneInfo
 from odoo.exceptions import ValidationError
 import logging
 _logger = logging.getLogger(__name__)
@@ -397,6 +398,26 @@ class is_of(models.Model):
 
             obj.qt_restante = obj.qt - obj.qt_declaree
         return []
+
+
+    @api.model
+    def bilan_fin_of_planifie(self):
+        """Action planifiée (reprise de scripts-externes/THEIA-bilan-fin-of.py) :
+        bilan des OF terminés depuis la veille et des OF en cours"""
+        #** Pas le dimanche, comme l'ancienne crontab (10 * * * 1-6) ***********
+        if datetime.datetime.now(ZoneInfo('Europe/Paris')).weekday()==6:
+            return
+
+        #** OF terminés depuis 1 jour ******************************************
+        heure_fin = (datetime.date.today() - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
+        for of in self.search([('heure_fin','>=',heure_fin)], limit=1000, order='heure_fin'):
+            _logger.info(u"Bilan fin OF terminé depuis 1 jour "+of.name)
+            of.bilan_fin_of()
+
+        #** OF en cours ********************************************************
+        for of in self.search([('heure_debut','!=',False), ('heure_fin','=',False)], limit=1000, order='heure_debut'):
+            _logger.info(u"Bilan fin OF en cours "+of.name)
+            of.bilan_fin_of()
 
 
 class is_of_tps(models.Model):

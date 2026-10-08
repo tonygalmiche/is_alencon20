@@ -144,7 +144,7 @@ class is_equipement(models.Model):
                 res = subprocess.call(cmd, shell=True)
                 _logger.info(cmd)
 
-    @api.depends('numero_equipement')
+    @api.depends('etat_presse_id.couleur')
     def _couleur(self):
         colors=[
             ("blanc"  , "white"),

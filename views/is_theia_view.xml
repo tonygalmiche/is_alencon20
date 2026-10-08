@@ -351,6 +351,8 @@
         <field name="name">is_of_gestionnaire_form_view</field>
         <field name="model">is.of</field>
         <field name="inherit_id" ref="is_of_form_view"/>
+        <!-- Groupe en commentaire en v16 : la vue s'appliquait à tous -->
+        <field name="group_ids" eval="[Command.link(ref('group_gestionnaire_cpi_raspberry'))]"/>
         <field name="arch" type="xml">
             <field name="coef_cpi" position="replace">
                 <field name="coef_cpi"/>

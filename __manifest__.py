@@ -16,6 +16,7 @@ Reprise d'is_alencon (Odoo 16) et de la partie THEIA d'is_plastigray16 (version 
         "mail",
         "hr",
         "web",
+        "is_theme_entreprise",
     ],
     "data" : [
         # is_plastigray16

@@ -70,5 +70,12 @@
                 </notebook>
             </field>
         </record>
+
+        <!-- Thème de l'entreprise (is_theme_entreprise), remis à chaque mise à jour du module.
+             write et non <record> : base.main_company est en noupdate, un <record> serait ignoré en mise à jour -->
+        <function model="res.company" name="write">
+            <value eval="[ref('base.main_company')]"/>
+            <value eval="{'is_theme_couleur': '#0096d6', 'is_theme_label_nowrap': True}"/>
+        </function>
     </data>
 </odoo>

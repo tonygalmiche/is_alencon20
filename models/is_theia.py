@@ -214,7 +214,13 @@ class is_of(models.Model):
     impression_bilan_equipe = fields.Boolean(u"Bilan des OFs de l'équipe imprimé et envoyé par mail", index=True, default=False)
     prioritaire       = fields.Boolean('Ordre de fabrication prioritaire')
     tx_operateur      = fields.Float(string="Tx Opérateur", digits=(14,3), help="Champ 'Coef Opé' de Silog (CoefOpe)")
-    
+    is_gestionnaire_theia = fields.Boolean("Gestionnaire THEIA", compute='_compute_is_gestionnaire_theia', help="Utilisateur du groupe Gestionnaire THEIA : certains champs de l'OF sont modifiables")
+
+    def _compute_is_gestionnaire_theia(self):
+        gestionnaire = self.env.user.has_group('is_alencon20.group_gestionnaire_cpi_raspberry')
+        for obj in self:
+            obj.is_gestionnaire_theia = gestionnaire
+
     _name_uniq = models.Constraint('unique(name)', "Le numéro d'OF doit être unique !")
 
 

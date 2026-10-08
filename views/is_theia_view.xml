@@ -290,32 +290,33 @@
                         <field name="prioritaire"   readonly="1"/>
                         <field name="moule"         readonly="1"/>
                         <field name="nb_empreintes"/>
-                        <field name="coef_cpi"      readonly="1"/>
+                        <field name="is_gestionnaire_theia" invisible="1"/>
+                        <field name="coef_cpi"      readonly="not is_gestionnaire_theia"/>
                         <field name="code_article"  readonly="1"/>
                         <field name="categorie"     readonly="1"/>
                         <field name="designation"   readonly="1"/>
                         <field name="uc"            readonly="1"/>
                         <field name="cout"          readonly="1"/>
-                        <field name="presse_id"     readonly="1"/>
+                        <field name="presse_id"     readonly="not is_gestionnaire_theia"/>
                         <field name="affecte"       readonly="1"/>
                         <field name="ordre"/>
                     </group>
                     <group>
                         <field name="qt"                 readonly="1"/>
                         <field name="nb_cycles"          invisible="1"/>
-                        <field name="qt_theorique"       readonly="1"/>
-                        <field name="qt_declaree"        readonly="1"/>
-                        <field name="qt_restante"        readonly="1"/>
-                        <field name="qt_rebut"           readonly="1"/>
+                        <field name="qt_theorique"       readonly="not is_gestionnaire_theia"/>
+                        <field name="qt_declaree"        readonly="not is_gestionnaire_theia"/>
+                        <field name="qt_restante"        readonly="not is_gestionnaire_theia"/>
+                        <field name="qt_rebut"           readonly="not is_gestionnaire_theia"/>
                         <field name="qt_rebut_theo"      readonly="1"/>
                         <field name="taux_rebut"         readonly="1"/>
                         <field name="taux_rebut_theo"    readonly="1"/>
-                        <field name="cycle_gamme"        readonly="1"/>
+                        <field name="cycle_gamme"        readonly="not is_gestionnaire_theia"/>
                         <field name="cycle_moyen"        readonly="1"/>
                         <field name="cycle_moyen_serie"  readonly="1"/>
                         <field name="tps_restant"        readonly="1" widget="float_time"/>
-                        <field name="heure_debut"        readonly="1"/>
-                        <field name="heure_fin"          readonly="1"/>
+                        <field name="heure_debut"        readonly="not is_gestionnaire_theia"/>
+                        <field name="heure_fin"          readonly="not is_gestionnaire_theia"/>
                         <field name="employee_id"        readonly="1"/>
                         <field name="heure_fin_planning" readonly="1"/>
                     </group>
@@ -343,44 +344,6 @@
                 </table>
             </sheet>
         </form>
-        </field>
-    </record>
-
-    <!-- Cette vue permet de rendre modifiable certains champs au groupe 'Gestionnaire THEIA' -->
-    <record id="is_of_gestionnaire_form_view" model="ir.ui.view">
-        <field name="name">is_of_gestionnaire_form_view</field>
-        <field name="model">is.of</field>
-        <field name="inherit_id" ref="is_of_form_view"/>
-        <!-- Groupe en commentaire en v16 : la vue s'appliquait à tous -->
-        <field name="group_ids" eval="[Command.link(ref('group_gestionnaire_cpi_raspberry'))]"/>
-        <field name="arch" type="xml">
-            <field name="coef_cpi" position="replace">
-                <field name="coef_cpi"/>
-            </field>
-            <field name="heure_debut" position="replace">
-                <field name="heure_debut"/>
-            </field>
-            <field name="heure_fin" position="replace">
-                <field name="heure_fin"/>
-            </field>
-            <field name="presse_id" position="replace">
-                <field name="presse_id"/>
-            </field>
-            <field name="qt_theorique" position="replace">
-                <field name="qt_theorique"/>
-            </field>
-            <field name="qt_declaree" position="replace">
-                <field name="qt_declaree"/>
-            </field>
-            <field name="qt_restante" position="replace">
-                <field name="qt_restante"/>
-            </field>
-            <field name="qt_rebut" position="replace">
-                <field name="qt_rebut"/>
-            </field>
-            <field name="cycle_gamme" position="replace">
-                <field name="cycle_gamme"/>
-            </field>
         </field>
     </record>
 

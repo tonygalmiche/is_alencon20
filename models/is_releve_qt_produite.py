@@ -180,7 +180,7 @@ class is_releve_qt_produite(models.Model):
 
                 cr.execute(SQL,[date_debut,of_id])
                 rows2 = cr.dictfetchall()
-                ct=duree_effective_totale=0
+                duree_effective_totale=0
                 for row2 in rows2:
                     duree = (row2['heure_fin'] -  row2['heure_debut'])
                     duree_effective = duree.total_seconds()
@@ -199,7 +199,6 @@ class is_releve_qt_produite(models.Model):
 
                     duree_effective = round(duree_effective/3600,2)
                     duree_effective_totale += duree_effective
-                    ct+=1
                 #**************************************************************
                 vals={
                     'releve_id'     : obj.id,

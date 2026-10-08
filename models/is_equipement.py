@@ -665,8 +665,10 @@ class is_equipement(models.Model):
                 #**************************************************************
 
                 #** Taux de fonctionnement ************************************
-                cadence_horaire =  round(3600 / of.cycle_gamme,2)
-                quantite_theorique_effective = cadence_horaire * duree_effective_totale
+                # Cycle gamme à 0 (non renseigné) : cadence et taux de fonctionnement restent à 0 (division par zéro en v16)
+                if of.cycle_gamme>0:
+                    cadence_horaire =  round(3600 / of.cycle_gamme,2)
+                    quantite_theorique_effective = cadence_horaire * duree_effective_totale
                 if quantite_theorique_effective>0:
                     tx_fct = int(100 * of.qt_declaree / quantite_theorique_effective)
                 #**************************************************************

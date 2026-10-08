@@ -3,6 +3,11 @@
     <data>
         <!-- Les menus principaux de THEIA (Process, OF, Indicateurs, Paramètres, Habilitation, Autorisations) sont dans is_theia_view.xml -->
 
+        <!-- Discussion : menu non utilisé, réservé au groupe vide « Afficher les menus non utilisés » -->
+        <record id="mail.menu_root_discuss" model="ir.ui.menu">
+            <field name="group_ids" eval="[Command.set([ref('is_afficher_menus_non_utilises_group')])]"/>
+        </record>
+
         <!-- THEIA / OF / Relevé des qt produites (is_alencon) -->
         <record id="is_releve_qt_produite_menu" model="ir.ui.menu" >
             <field name="name">Relevé des qt produites</field>

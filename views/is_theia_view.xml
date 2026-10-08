@@ -749,7 +749,7 @@
                 <field name="name"/>
                 <field name="adresse_mac"/>
                 <field name="last_presse_id"/>
-                <field name="onglet_indicateurs"/>
+                <field name="onglet_indicateurs" column_invisible="1"/>
                 <field name="onglet_es"/>
                 <field name="onglet_actif"/>
                 <field name="declaration_odoo" column_invisible="1"/>
@@ -770,7 +770,7 @@
                     <field name="name"/>
                     <field name="adresse_mac"/>
                     <field name="last_presse_id"/>
-                    <field name="onglet_indicateurs"/>
+                    <field name="onglet_indicateurs" invisible="1"/>
                     <field name="onglet_es"/>
                     <field name="onglet_actif"/>
                     <field name="declaration_odoo" invisible="1"/>

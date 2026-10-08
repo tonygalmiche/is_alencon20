@@ -77,5 +77,18 @@
             <value eval="[ref('base.main_company')]"/>
             <value eval="{'is_theme_couleur': '#0096d6', 'is_theme_label_nowrap': True}"/>
         </function>
+
+        <!-- Résumé périodique d'Odoo (digest) désactivé, remis à chaque mise à jour du module :
+             il n'est pas utilisé et ses mails partaient en erreur en v16 (9 876 au 08/10/2026) -->
+        <function model="digest.digest" name="action_deactivate">
+            <value eval="[ref('digest.digest_digest_default')]"/>
+        </function>
+
+        <!-- Inscription libre fermée (b2b : sur invitation seulement), remise à chaque mise à jour du module :
+             b2c par défaut, n'importe qui pourrait se créer un compte depuis la page de connexion -->
+        <function model="ir.config_parameter" name="set_str">
+            <value>auth_signup.invitation_scope</value>
+            <value>b2b</value>
+        </function>
     </data>
 </odoo>

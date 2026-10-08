@@ -280,6 +280,9 @@
         <field name="model">is.of</field>
         <field name="arch" type="xml">
         <form>
+            <header>
+                <button name="%(bilan_fin_of_report)d" type="action" string="Bilan de fin d'OF" icon="fa-print" class="btn-primary"/>
+            </header>
             <sheet>
                 <group>
                     <group>
@@ -670,6 +673,23 @@
         <field name="arch" type="xml">
         <form>
             <sheet>
+                <!-- Intitulés et couleurs utilisés dans le code (get_parc_presse et creer_lignes_action) -->
+                <div class="alert alert-warning" role="alert">
+                    <strong>Attention avant de modifier l'intitulé ou la couleur d'un état :</strong>
+                    <ul class="mb-0">
+                        <li>
+                            <strong>Intitulé</strong> : le <strong>parc des presses</strong> (THEIA / Parc des presses) exclut du temps de production effective les états
+                            ABSENCE CHARGE PLANNING, ESSAI MÉTHODES, PRÉPARATION POSTE, CHANGEMENT MOULE, CHANGEMENT VERSION,
+                            MAINTENANCE PRÉVENTIVE MOULE N1 et N2, MAINTENANCE PRÉVENTIVE PRESSE N1 et N2, MAINTENANCE PREVENTIVE TPM N1,
+                            reconnus par leur intitulé exact (accents compris). En renommer un fausse les indicateurs du parc ; les renommer tous empêche son affichage.
+                        </li>
+                        <li>
+                            <strong>Couleur</strong> : la <strong>création des lignes du relevé des quantités produites</strong> (THEIA / OF / Relevé des qt produites)
+                            calcule le temps de production effective avec les états de couleur Vert. Changer la couleur d'un état modifie ce temps ;
+                            s'il n'y a plus aucun état Vert, la création des lignes est impossible.
+                        </li>
+                    </ul>
+                </div>
                 <group>
                     <field name="name5x5"/>
                     <field name="colonne5x5"/>

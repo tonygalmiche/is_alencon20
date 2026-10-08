@@ -17,11 +17,14 @@ Reprise d'is_alencon (Odoo 16) et de la partie THEIA d'is_plastigray16 (version 
         "hr",
         "web",
         "is_theme_entreprise",
+        "digest",      # désactivation du résumé périodique (res_company_view.xml)
+        "auth_signup", # fermeture de l'inscription libre (res_company_view.xml)
     ],
     "data" : [
         # is_plastigray16
         "security/res.groups.xml",
         "security/ir.access.csv",
+        "views/report_bilan_fin_of.xml", # avant is_theia_view.xml : bouton d'impression dans la fiche de l'OF
         "views/is_database_view.xml",
         "views/is_equipement_view.xml",
         "views/is_theia_view.xml",
@@ -31,7 +34,6 @@ Reprise d'is_alencon (Odoo 16) et de la partie THEIA d'is_plastigray16 (version 
         "views/is_mem_var_view.xml",
         "views/res_users_view.xml",
         "views/res_company_view.xml",
-        "views/report_bilan_fin_of.xml",
 
         # is_alencon
         "views/is_theia_alencon_view.xml",

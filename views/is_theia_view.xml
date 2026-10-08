@@ -789,8 +789,8 @@
                 <field name="onglet_indicateurs"/>
                 <field name="onglet_es"/>
                 <field name="onglet_actif"/>
-                <field name="declaration_odoo"/>
-                <field name="zebra_id"/>
+                <field name="declaration_odoo" column_invisible="1"/>
+                <field name="zebra_id"         column_invisible="1"/>
                 <field name="create_date"/>
                 <field name="write_date"/>
             </list>
@@ -810,8 +810,8 @@
                     <field name="onglet_indicateurs"/>
                     <field name="onglet_es"/>
                     <field name="onglet_actif"/>
-                    <field name="declaration_odoo"/>
-                    <field name="zebra_id"/>
+                    <field name="declaration_odoo" invisible="1"/>
+                    <field name="zebra_id"         invisible="1"/>
                 </group>
 
                 <table>

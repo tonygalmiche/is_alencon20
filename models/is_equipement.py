@@ -550,6 +550,8 @@ class is_equipement(models.Model):
             for arret in arrets:
                 tps_arret = (now - arret.date_heure).total_seconds()/3600
                 arret.tps_arret = tps_arret
+        # Écriture en base de tps_arret : les requêtes SQL qui suivent (relevé, parc des presses) le lisent directement
+        self.env['is.presse.arret'].flush_model(['tps_arret'])
 
 
     def get_color_indicateur(self,indicateur,val):

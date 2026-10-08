@@ -148,9 +148,10 @@ class is_raspberry(models.Model):
         for obj in self:
             IP=obj.name
             cmd="ssh -o ConnectTimeout=2 -o StrictHostKeyChecking=no root@"+IP+' "export XAUTHORITY=/home/pi/.Xauthority; export DISPLAY=:0; xdotool search --class chromium | tail -1"'
-            WID=subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell = True).strip()
+            # text=True : résultat en texte et non en octets (Python 3), sinon la concaténation de WID plante
+            WID=subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell = True, text=True).strip()
             cmd="ssh -o ConnectTimeout=2 -o StrictHostKeyChecking=no root@"+IP+' "export XAUTHORITY=/home/pi/.Xauthority; export DISPLAY=:0 && xdotool windowfocus '+WID+' && xdotool key --window '+WID+' F5"'
-            res=subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell = True).strip()
+            res=subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell = True, text=True).strip()
 
 
     def rafraichir_sorties(self):
@@ -167,7 +168,7 @@ class is_raspberry(models.Model):
             f.write(sorties)
             f.close()
             cmd="scp -o ConnectTimeout=2 -o StrictHostKeyChecking=no "+path+" root@"+IP+":/opt/theia/sorties/sorties.txt"
-            res=subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell = True).strip()
+            res=subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell = True, text=True).strip()
 
             _logger.info("is_raspberry : rafraichir_sorties : %s : %s : %s"%(obj.name, sorties, res))
 

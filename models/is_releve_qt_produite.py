@@ -4,7 +4,6 @@ from odoo.exceptions import ValidationError
 from datetime import datetime, timedelta, timezone
 import pytz
 import csv
-import base64
 import shutil
 
 
@@ -88,14 +87,11 @@ class is_releve_qt_produite(models.Model):
 
     def maj_duree_etat(self):
         "Calcul de la durée de l'état en cours jusqu'à maintenant"
-        cr=self.env.cr
         for obj in self:
-            now = datetime.now(tz=timezone.utc).replace(tzinfo=None)
             domain=[('type_id.code', 'in', ['PE','9000'])]
             equipements = self.env['is.equipement'].search(domain, order="numero_equipement")
             for equipement in equipements:
                 equipement.maj_duree_etat()
-        cr.commit()
 
 
     def creer_lignes_action(self):
@@ -299,7 +295,7 @@ class is_releve_qt_produite(models.Model):
                 'type':        'binary',
                 'res_model':   model,
                 'res_id':      obj.id,
-                'datas':       base64.b64encode(datas),
+                'raw':         datas,  # datas supprimé en v20 (ignoré à la création, erreur à la modification)
             }
             if attachments:
                 for attachment in attachments:
